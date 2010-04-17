@@ -25,7 +25,7 @@
 # Adrián Eiris
 # Nacho Varela
 
-
+import os
 
 class MapFilesClass:
 
@@ -35,8 +35,11 @@ class MapFilesClass:
         f.close()
         return s
 
-    def generateMapFile(self, name, table, column):
-        f = open (name + '.map', "w")
+
+    def generateMapFile(self, mapfileDir, name, table, column):
+        
+        mapfilePath = os.path.abspath(mapfileDir + name + '.map')
+        f = open (mapfilePath, "w")
         f.write ('MAP\n')
         f.write ('NAME "' + name + '"\n')
         f.write ('SIZE 400 300\n') # Tamaño en pixeles

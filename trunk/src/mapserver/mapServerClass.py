@@ -26,31 +26,65 @@
 # Nacho Varela
 
 import mapscript
+import os
 from mapFilesClass import MapFilesClass
+from scpClass import SCPClass
 
 class MapServerClass:
 
-    def generateImage(self, mapfilePath):
-        # mapfile: path to the .map file
+    def __init__(self):
+        self.scp = SCPClass()
+        self.mapfileDir = 'mapDir/' # privado
+        self.imageDir = 'imageDir/' # Respecto a la parte publica del apache de abredatos
+        self.mfs = MapFilesClass()
+        self.host = "http://193.147.33.251"
+        
+      
+    def generateImage(self, mapName):
+
+        mapfilePath = os.path.abspath(self.mapfileDir + mapName + '.map')
         
         map = mapscript.mapObj(mapfilePath)
         mapImage = map.draw()
+        imagePath = os.path.abspath(self.imageDir + mapName + '.' + mapImage.format.extension)
+        mapImage.save(imagePath)
+        return imagePath
         
-        imageName = 'test.' + mapImage.format.extension
-        mapImage.save(imageName)
+
+    def getImageUri(self,mapName, table, column):
+        
+        try:
+            self.mfs.generateMapFile (self.mapfileDir, mapName, table, column)
+            imagePath = self.generateImage(mapName)
+            uri = self.host + '/srv/www/' + imagePath
+            return uri
+        except:
+            return "Error"
+        
+        
 
     # def uploadImage(self, imagePath):
-        
+    #     result = True
+    #     print '1'
+    #     self.scp.uploadFile(imagePath)
+    #     print '2'
+    #     # except Error:
+    #     #   result = False
+    #     #   sftp.close()
+    #     #   transport.close()
+    #     #   self.scp = SCPClass()
+    #     # finally:
+    #     #   return result
 
-
-  
-
-
+    
+            
+            
 msc = MapServerClass()
-mfs = MapFilesClass()
 
-mapfileName = "foo"
-mapfilePath = "foo.map"
-# mapfileName, table, colum
-mfs.generateMapFile (mapfileName, "ccaa_2", "pobl_2009")
-msc.generateImage (mapfilePath)
+mapName = "foo"
+table = "ccaa_2"
+column = "pobl_2009"
+
+valor = msc.getImageUri(mapName, table, column)
+
+print valor
