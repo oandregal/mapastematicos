@@ -187,13 +187,21 @@ def getPreviousNotNullString(l, start_idx):
     """Gets the previous string from before 'start_idx' index that is not null"""
     aux = ''
     for s in l[0:start_idx]:
+        s = cleanColumns(s)
+        s = s.replace('-','')
         if len(s)>0:
             aux = s
     return aux
 
+def getRowDictionary():
+    """" Opens a file with CCAA and Provinces and """
+
+
 def getReportData(csvfile):
     """Get report data of the table. When complex columns (more than one level) create a simple one merging them.
            Spaces on the columnames are changed for '_' chars. Multiple level columns are separated by '-' char."""
+
+    rowDict =  getRowDictionary()
 
     # TODO It is always starts at 9
     reader = open(csvfile, "rb")
@@ -213,21 +221,23 @@ def getReportData(csvfile):
             if len(header)==0:
                 header = line.split(';')
                 for i in range(0, len(header)):
-                    header[i] = cleanColumns(header[i])
+                    h = cleanColumns(header[i])
+                    if len(h)==0:
+                        h = getPreviousNotNullString(header, i)
+                    header[i] = h
             else:
                 aux = line.split(';')
                 h_aux = list()
                 for i in range(0, len(header)):
-                    #print str(n_row) +"--" + str(i)
+                    print str(n_row) +"--" + str(i)
                     #print 'HEADER: ' + str(header)
                     #print 'LINE: ' + str(aux)
-                    h = getPreviousNotNullString(header, i+1)
                     #print 'PREVIOUS: ' + h
-                    if len(h)>0:
-                        aux2 = (h + '-' + cleanColumns(aux[i]))
-                        h_aux.append(aux2)
+#                    if len(h)>0:
+                    print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
+                    header[i] = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
+                    #h_aux.append(aux2)
                         #print 'NEW: ' + aux2
-                header = h_aux
             #### TODO If there is a year on the Column put as first String????????????
             print str(n_row) + str(header)
             
