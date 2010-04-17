@@ -26,6 +26,8 @@ def main(argv):
 def cleanString(s):
     """Clean strings for spaces, final dots, strange numbers, etc...."""
     #### TODO
+    if len(s)==0:
+        return ''
 
     # Remove  dots at the end of the string
     while s[-1]=='.':
@@ -38,7 +40,11 @@ def cleanString(s):
         if end > start:
             s = s[0:start]+s[end:]
 
-    # Remove spaces
+    # Remove '-' and '_' chars
+    s = s.replace('-', '')
+    s = s.replace('_', '')
+
+    # Remove initial and final spaces 
     s = s.strip()
 
     # Remove doubles spaces
@@ -46,6 +52,12 @@ def cleanString(s):
         s = s.replace('  ', ' ')
 
     return s;
+
+
+def cleanColumns(s):
+    s = cleanString(s)
+    s = s.replace(' ', '_')
+    return s
 
 
 def checkIfINE(csvfile):
@@ -99,15 +111,15 @@ def getNotes(csvfile):
     reader = open(csvfile, "rb")
     n_row = 0
     notesText = ''
-    notesSection = False
+    isNotesSection = False
     for line in reader:
         # TODO It is always at the row 3
         n_row = n_row +1
         if line.find('Fuente:') != -1:
-            notesSection = False
+            isNotesSection = False
             return notesText
 
-        if notesSection:
+        if isNotesSection:
             aux = cleanString(line)
             ######### Cleaning
             if (len(aux)>1):
@@ -129,7 +141,7 @@ def getNotes(csvfile):
                 print '------> NOTE: ' + aux
 
         if line.find('Notas:') != -1:
-            notesSection = True
+            isNotesSection = True
 
     return notesText
 
@@ -152,18 +164,80 @@ def getTags(csvfile):
     reader = open(csvfile, "rb")
     n_row = 0
     tags = list()
+    ## TODO FIELD????????????????????????????????
     for line in reader:
         n_row = n_row +1
-        if n_row < 2:
+        if n_row < 5:
             aux = cleanString(line)
             tags = identifyTags(aux)
             print '--> TAG: ' + aux
         else: 
             break
-    return aux        
+    return aux
 
-def identiftyTags(s):
-    
+
+
+
+
+
+########################################################################################
+## DATA
+
+def getPreviousNotNullString(l, start_idx):
+    """Gets the previous string from before 'start_idx' index that is not null"""
+    aux = ''
+    for s in l[0:start_idx]:
+        if len(s)>0:
+            aux = s
+    return aux
+
+def getReportData(csvfile):
+    """Get report data of the table. When complex columns (more than one level) create a simple one merging them.
+           Spaces on the columnames are changed for '_' chars. Multiple level columns are separated by '-' char."""
+
+    # TODO It is always starts at 9
+    reader = open(csvfile, "rb")
+    n_row = 0
+    header = list()
+    isHeaderSection = True
+
+    for line in reader:
+        n_row = n_row +1
+        
+        if n_row >= 8 and isHeaderSection:
+            line = cleanString(line)
+            ## When there is text  in the first column  data section starts 
+            if line[0]!=';':
+                isHeaderSection = False
+                break
+            if len(header)==0:
+                header = line.split(';')
+                for i in range(0, len(header)):
+                    header[i] = cleanColumns(header[i])
+            else:
+                aux = line.split(';')
+                for i in range(0, len(header)):
+                    print 'HEADER: ' + str(header)
+                    h = getPreviousNotNullString(header, i)
+                    print 'PREVIOUS: ' + h
+                    header[i] = h + '-' + cleanColumns(aux[i])
+                    print 'NEW: ' + header[i]
+            #### TODO If there is a year on the Column put as first String????????????
+            print str(n_row) + str(header)
+            
+        if not isHeaderSection:
+            ## Get CCAA/Province names (dict)
+            pass
+                
+    return n_row
+
+
+#########################################################################################
+def identifyTags(s):
+    ##### TODO
+    ## It takes a dictionary of tags defined on a csv (tag;autotag;synonym1;..;synonymN)
+    tags = list()
+    return tags
 
 
 def execute(csvfile):
@@ -180,9 +254,8 @@ def execute(csvfile):
     getNotes(csvfile)
     getDataSource(csvfile)
     getCopyright(csvfile)
+    getReportData(csvfile)
     getTags(csvfile)
-
-
 
 
 if __name__ == "__main__":
