@@ -3,26 +3,30 @@
 import sys
 import web
 
+import queriesdb
+from tests import db_config
+from tests import report_data, map_data, tags
+from tests import user
+
 sys.path.append('/home/mapastematicos/pylibs/')
 render = web.template.render('templates/')
 
 urls = (
-    "/", "Index",
-    "/map", "Map",
-    "/search", "Search"
+        "/", "Index",
+        "/map", "Map",
+        "/search", "Search"
 )
 
 app = web.application(urls, globals())
 
-class Map():
-    def GET(self):
-        name="foo"
-        return render.map(name)
-
-
 class Index:
     def GET(self):
         return render.index()
+
+
+class Map():
+    def GET(self):
+        return render.map(id_report)
 
 
 class Search:
