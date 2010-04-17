@@ -1,0 +1,48 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteBase /
+
+  RewriteRule static/(.+)$ static/$1 [L]
+
+  RewriteCond %{REQUEST_URI} !^/icons
+  RewriteCond %{REQUEST_URI} !^/favicon.ico$
+  RewriteCond %{REQUEST_URI} !^(/.*)+index.py/
+  RewriteRule ^(.*)$ index.py/$1 [PT]
+
+</IfModule>
+
+<Files .htaccess>
+    order allow,deny
+    deny from all
+</Files>
+
+
+#with CGI
+
+# Options +ExecCGI
+# AddHandler cgi-script .py
+# DirectoryIndex index.py/
+# <IfModule mod_rewrite.c>
+#   RewriteEngine on
+#   RewriteBase /
+#   RewriteCond %{REQUEST_URI} !^/favicon.ico$
+#   RewriteCond %{REQUEST_URI} !^/static/(.*)$
+#   RewriteCond %{REQUEST_URI} !^(/.*)+index.py/
+#   RewriteRule ^(.*)$ /index.py/$1 [PT]
+# </IfModule>
+
+# With FASTCGI
+# http://wiki.dreamhost.com/index.php/Web.py
+
+# AddHandler fastcgi-script .fcgi
+
+# <IfModule mod_rewrite.c>
+# RewriteEngine on
+
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteRule ^(.*)$ dispatch.fcgi/$1  [L]
+
+# </IfModule>
+
+# <Files index.py>      SetHandler fastcgi-script
+# </Files>
