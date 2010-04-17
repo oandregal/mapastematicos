@@ -216,12 +216,18 @@ def getReportData(csvfile):
                     header[i] = cleanColumns(header[i])
             else:
                 aux = line.split(';')
+                h_aux = list()
                 for i in range(0, len(header)):
-                    print 'HEADER: ' + str(header)
-                    h = getPreviousNotNullString(header, i)
-                    print 'PREVIOUS: ' + h
-                    header[i] = h + '-' + cleanColumns(aux[i])
-                    print 'NEW: ' + header[i]
+                    #print str(n_row) +"--" + str(i)
+                    #print 'HEADER: ' + str(header)
+                    #print 'LINE: ' + str(aux)
+                    h = getPreviousNotNullString(header, i+1)
+                    #print 'PREVIOUS: ' + h
+                    if len(h)>0:
+                        aux2 = (h + '-' + cleanColumns(aux[i]))
+                        h_aux.append(aux2)
+                        #print 'NEW: ' + aux2
+                header = h_aux
             #### TODO If there is a year on the Column put as first String????????????
             print str(n_row) + str(header)
             
