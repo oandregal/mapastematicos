@@ -1,0 +1,11 @@
+chtt=[Titulo]
+chts=[colorTitulo],[fontsizeTitulo]
+cht=[TipoGrafico]
+chs=[TamanhoGrafico]
+chbh=a
+chd=t:[Valores]
+chds=[Rango]
+chxt=y,x
+chxl=0:|[Labels]
+chco=[Color]
+chm=N,909090,0,,10
