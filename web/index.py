@@ -1,21 +1,33 @@
 #!/usr/bin/env python
 
 import sys
-sys.path.append('/home/mapastematicos/pylibs/')
-
 import web
+
+sys.path.append('/home/mapastematicos/pylibs/')
 render = web.template.render('templates/')
 
 urls = (
-    "/(.*)", "Hello"
+    "/", "Index",
+    "/map", "Map",
+    "/search", "Search"
 )
 
 app = web.application(urls, globals())
 
-class Hello:
-    def GET(self, name):
-        return render.index(name)
+class Map():
+    def GET(self):
+        name="foo"
+        return render.map(name)
 
+
+class Index:
+    def GET(self):
+        return render.index()
+
+
+class Search:
+    def GET(self):
+        return render.search()
 
 if __name__ == "__main__":
     app.run() #this is normally only called from dispatch.cgi
