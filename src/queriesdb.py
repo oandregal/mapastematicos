@@ -33,11 +33,6 @@ class QueriesDB:
     def addReport(self, report_data):
         """Introduces a new report with a map associated"""
 
-        report_data = {'id_report': 00000000000000000001,
-                       'img_url'  : "foo",
-                       'table_csv': "table csv",
-                       'column_name': "el nombre de la columna"}
-
         tablename = "map"
         id_map = None
         try:
@@ -58,6 +53,10 @@ class QueriesDB:
 if __name__ == "__main__":
 
     import databasevalues
+    report_data = {'id_report': 00000000000000000001,
+                   'img_url'  : "foo",
+                   'table_csv': "table csv",
+                   'column_name': "el nombre de la columna"}
 
     q = QueriesDB(databasevalues.dbhost,
                   databasevalues.dbname,
