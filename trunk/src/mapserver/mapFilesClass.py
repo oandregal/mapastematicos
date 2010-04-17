@@ -64,8 +64,18 @@ class MapFilesClass:
         f.write ('DATA "the_geom from gis_schema.' + table +'"\n')  
   
       # para cada rango que quiera hacer
+
+        f.write('CLASS\n')
+        f.write('STYLE \n')
+        f.write('COLOR 204 255 204\n')
+        f.write('OUTLINECOLOR 102 102 102\n')
+        # f.write('WIDTH 1\n')
+        f.write('END\n')
+        f.write('EXPRESSION ([' + column + '] >= 73460 AND [' + column + '] <= 436402)\n')
+        # f.write('NAME "73.460 - 436.402"\n')
+        f.write('END\n')
+
         f.write ('CLASS\n')
-        f.write ('# EXPRESSION (([' + column + '] > rango1) and ([' + column + '] < rango2))')
         f.write ('STYLE\n')
         f.write ('COLOR 254 226 197\n') # relleno del polígono
         f.write ('OUTLINECOLOR 255 0 0\n') # color del borde
@@ -81,6 +91,3 @@ class MapFilesClass:
         f.write ('END\n') # NAME
         
         f.close()
-        
-mfc = MapFilesClass()
-mfc.generateMapFile ("casa", "ccaa_2", "foo")
