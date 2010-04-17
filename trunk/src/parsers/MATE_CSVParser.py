@@ -186,20 +186,118 @@ def getTags(csvfile):
 def getPreviousNotNullString(l, start_idx):
     """Gets the previous string from before 'start_idx' index that is not null"""
     aux = ''
-    for s in l[0:start_idx]:
-        s = cleanColumns(s)
-        s = s.replace('-','')
+    for s in l[0:start_idx+1]:
         if len(s)>0:
             aux = s
     return aux
 
 def getRowDictionary():
     """" Opens a file with CCAA and Provinces and """
+    ### TODO
+    pass
+
+# def getReportColumns(csvfile):
+#     """Get report columns of the table. When complex columns (more than one level) create a simple one merging them.
+#            Spaces on the columnames are changed for '_' chars. Multiple level columns are separated by '-' char."""
+
+#     rowDict =  getRowDictionary()
+
+#     # TODO It is always starts at 9
+#     reader = open(csvfile, "rb")
+#     n_row = 0
+#     header = list()
+#     isHeaderSection = True
+
+#     for line in reader:
+#         n_row = n_row +1
+        
+#         if n_row >= 8 and isHeaderSection:
+#             line = cleanString(line)
+#             ## When there is text  in the first column  data section starts 
+#             if line[0]!=';':
+#                 isHeaderSection = False
+#                 break
+#             if len(header)==0:
+#                 header = line.split(';')
+#                 for i in range(0, len(header)):
+#                     h = cleanColumns(header[i])
+#                     if len(h)==0:
+#                         h = getPreviousNotNullString(header, i)
+#                     header[i] = h
+#             else:
+#                 aux = line.split(';')
+#                 for i in range(0, len(header)):
+# #                    print str(n_row) +"--" + str(i)
+#                     #print 'HEADER: ' + str(header)
+#                     #print 'LINE: ' + str(aux)
+#                     #print 'PREVIOUS: ' + h
+# #                    if len(header[i])>1:
+# #                    print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
+#                     h  = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
+#                     if (len(cleanColumns(h)) >0):
+#                         header[i] = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
+
+#                     #h_aux.append(aux2)
+#                         #print 'NEW: ' + aux2
+#             #### TODO If there is a year on the Column put as first String????????????
+#             print str(n_row) + str(header)
+
+#         return header
+#         if not isHeaderSection:
+#             break                
+#     return n_row
+
+
+def getReportColumns(csvfile):
+    """Get report columns of the table. When complex columns (more than one level) create a simple one merging them.
+           Spaces on the columnames are changed for '_' chars. Multiple level columns are separated by '-' char."""
+
+    # TODO It is always starts at 9
+    reader = open(csvfile, "rb")
+    n_row = 0
+    header = list()
+    isHeaderSection = True
+
+    for line in reader:
+        n_row = n_row +1
+        
+        if n_row >= 8 and isHeaderSection:
+            line = cleanString(line)
+            ## When there is text  in the first column  data section starts 
+            if line[0]!=';':
+                isHeaderSection = False
+                break
+            if len(header)==0:
+                header = line.split(';')
+                for i in range(0, len(header)):
+                    h = cleanColumns(header[i])
+                    if len(h)==0:
+                        h = getPreviousNotNullString(header, i)
+                    header[i] = h
+            else:
+                aux = line.split(';')
+                h_aux = list()
+                for i in range(0, len(header)):
+                    #print str(n_row) +"--" + str(i)
+                    #print 'HEADER: ' + str(header)
+                    #print 'LINE: ' + str(aux)
+                    #print 'PREVIOUS: ' + h
+                    h = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
+#                    if len(h.replace('-',''))>0:
+                        #print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
+                    header[i] = h
+                    #h_aux.append(aux2)
+                        #print 'NEW: ' + aux2
+            #### TODO If there is a year on the Column put as first String????????????
+            print str(n_row) + str(header)
+        if not isHeaderSection:
+            break
+    return header
+
 
 
 def getReportData(csvfile):
-    """Get report data of the table. When complex columns (more than one level) create a simple one merging them.
-           Spaces on the columnames are changed for '_' chars. Multiple level columns are separated by '-' char."""
+    """Get report data of the table."""
 
     rowDict =  getRowDictionary()
 
@@ -229,23 +327,20 @@ def getReportData(csvfile):
                 aux = line.split(';')
                 h_aux = list()
                 for i in range(0, len(header)):
-                    print str(n_row) +"--" + str(i)
+#                    print str(n_row) +"--" + str(i)
                     #print 'HEADER: ' + str(header)
                     #print 'LINE: ' + str(aux)
                     #print 'PREVIOUS: ' + h
 #                    if len(h)>0:
-                    print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
+#                    print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
                     header[i] = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
                     #h_aux.append(aux2)
                         #print 'NEW: ' + aux2
             #### TODO If there is a year on the Column put as first String????????????
             print str(n_row) + str(header)
-            
         if not isHeaderSection:
-            ## Get CCAA/Province names (dict)
-            pass
-                
-    return n_row
+            break
+    return header
 
 
 #########################################################################################
@@ -270,7 +365,8 @@ def execute(csvfile):
     getNotes(csvfile)
     getDataSource(csvfile)
     getCopyright(csvfile)
-    getReportData(csvfile)
+    getReportColumns(csvfile)
+#    getReportData(csvfile)
     getTags(csvfile)
 
 
