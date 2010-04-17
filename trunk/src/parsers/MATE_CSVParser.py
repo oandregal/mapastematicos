@@ -1,12 +1,27 @@
+# -*- coding: utf-8 -*-
 # Parser for CSV INE files (abredatos.org)
+# -*- coding: utf-8 -*-
 
 #import csv
 import getopt
-import sys, os
+import sys, os, codecs
+
+PROV_DICT_FILE = 'dict_provincias.csv'
+CCAA_DICT_FILE = 'dict_ccaa.csv'
+TAG_DICT_FILE = 'dict_tags.csv'
+
+# Dictionary of NAME and string identifiers for CCAA and provinces
+provDict = None
+ccaaDict = None
+
+# Dictionary of TAGS and string identifiers of them
+tagDict = None
+
 
 def usage():
     print('Usage: python *.py -f file.csv')
     print('Wrong argument')
+    print('IMPORTANT: On the same directory of this script should be placed 3 CSV files of dictionaries:  "dict_provincias.csv", "dict_ccaa.csv" and "dict_tags.csv"')
 
 def main(argv):
     try:
@@ -57,6 +72,15 @@ def cleanString(s):
 def cleanColumns(s):
     s = cleanString(s)
     s = s.replace(' ', '_')
+    return s
+
+def cleanEncodingLower(s):
+    s  =  cleanString(s).lower()
+    s = s.replace('á', 'a')
+    s = s.replace('é', 'e')
+    s = s.replace('í', 'i')
+    s = s.replace('ó', 'o')
+    s = s.replace('ú', 'u')
     return s
 
 
@@ -176,10 +200,6 @@ def getTags(csvfile):
     return aux
 
 
-
-
-
-
 ########################################################################################
 ## DATA
 
@@ -191,61 +211,6 @@ def getPreviousNotNullString(l, start_idx):
             aux = s
     return aux
 
-def getRowDictionary():
-    """" Opens a file with CCAA and Provinces and """
-    ### TODO
-    pass
-
-# def getReportColumns(csvfile):
-#     """Get report columns of the table. When complex columns (more than one level) create a simple one merging them.
-#            Spaces on the columnames are changed for '_' chars. Multiple level columns are separated by '-' char."""
-
-#     rowDict =  getRowDictionary()
-
-#     # TODO It is always starts at 9
-#     reader = open(csvfile, "rb")
-#     n_row = 0
-#     header = list()
-#     isHeaderSection = True
-
-#     for line in reader:
-#         n_row = n_row +1
-        
-#         if n_row >= 8 and isHeaderSection:
-#             line = cleanString(line)
-#             ## When there is text  in the first column  data section starts 
-#             if line[0]!=';':
-#                 isHeaderSection = False
-#                 break
-#             if len(header)==0:
-#                 header = line.split(';')
-#                 for i in range(0, len(header)):
-#                     h = cleanColumns(header[i])
-#                     if len(h)==0:
-#                         h = getPreviousNotNullString(header, i)
-#                     header[i] = h
-#             else:
-#                 aux = line.split(';')
-#                 for i in range(0, len(header)):
-# #                    print str(n_row) +"--" + str(i)
-#                     #print 'HEADER: ' + str(header)
-#                     #print 'LINE: ' + str(aux)
-#                     #print 'PREVIOUS: ' + h
-# #                    if len(header[i])>1:
-# #                    print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
-#                     h  = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
-#                     if (len(cleanColumns(h)) >0):
-#                         header[i] = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
-
-#                     #h_aux.append(aux2)
-#                         #print 'NEW: ' + aux2
-#             #### TODO If there is a year on the Column put as first String????????????
-#             print str(n_row) + str(header)
-
-#         return header
-#         if not isHeaderSection:
-#             break                
-#     return n_row
 
 
 def getReportColumns(csvfile):
@@ -279,15 +244,9 @@ def getReportColumns(csvfile):
                 h_aux = list()
                 for i in range(0, len(header)):
                     #print str(n_row) +"--" + str(i)
-                    #print 'HEADER: ' + str(header)
-                    #print 'LINE: ' + str(aux)
-                    #print 'PREVIOUS: ' + h
                     h = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
-#                    if len(h.replace('-',''))>0:
-                        #print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
+                    #print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
                     header[i] = h
-                    #h_aux.append(aux2)
-                        #print 'NEW: ' + aux2
             #### TODO If there is a year on the Column put as first String????????????
             print str(n_row) + str(header)
         if not isHeaderSection:
@@ -295,55 +254,154 @@ def getReportColumns(csvfile):
     return header
 
 
+def getCCAADictionary():
+    """" Opens a file with CCAA and identifiers and  creates a dict"""
+
+    global ccaaDict
+    global CCAA_DICT_FILE
+
+    if ccaaDict != None:
+        return ccaaDict
+    else:
+        ccaaDict = dict()
+        print(CCAA_DICT_FILE)
+        dict_r = open(CCAA_DICT_FILE, 'rb')
+        for line in dict_r:
+            line = line.replace('"', '')
+            aux = line.split(';')
+            name = ''
+            if len(aux)>0:
+                name = cleanString(aux[0])
+                for s in aux[1:]:
+                    ##### OJO CON ENCODING
+                    s  =  cleanEncodingLower(s)
+                    if len(s)>0:
+                        ccaaDict[s] = name
+            else:
+                pass
+
+#    print("\n\n")
+#    print(provDict)
+#    print("\n\n")
+    return ccaaDict
+
+def getProvDictionary():
+    """" Opens a file with Provinces and identifiers and  creates a dict"""
+
+    global provDict
+    global PROV_DICT_FILE
+
+    if provDict != None:
+        return provDict
+    else:
+        provDict = dict()
+        print(PROV_DICT_FILE)
+        dict_r = open(PROV_DICT_FILE, 'rb')
+        for line in dict_r:
+            line = line.replace('"', '')
+            aux = line.split(';')
+            name = ''
+            if len(aux)>0:
+                name = cleanString(aux[0])
+                for s in aux[1:]:
+                    ##### OJO CON ENCODING
+                    s = cleanEncodingLower(s)
+                    if len(s)>0:
+                        provDict[s] = name
+            else:
+                pass
+
+#    print("\n\n")
+#    print(provDict)
+#    print("\n\n")
+    return provDict
+
+
+def getCorrectProvName(s):
+
+    s = cleanString(s).lower() 
+
+    provDict  =  getProvDictionary()
+    for k in provDict.keys():
+        #print s + '  ' +  k + '  ' + str(s.find(k))
+        if s.find(k) != -1:
+            return provDict.get(k)
+    return None
+
+
+def getCorrectCCAAName(s):
+
+    s = cleanString(s).lower() 
+
+    ccaaDict  =  getCCAADictionary()
+    for k in ccaaDict.keys():
+        #print s + '  ' +  k + '  ' + str(s.find(k))
+        if s.find(k) != -1:
+            return ccaaDict.get(k)
+    return None
+
+
+###################################################### TODO
+###################################################### TODO
+###################################################### TODO make the dict CCAAA!!!!
 
 def getReportData(csvfile):
     """Get report data of the table."""
 
-    rowDict =  getRowDictionary()
-
     # TODO It is always starts at 9
     reader = open(csvfile, "rb")
     n_row = 0
-    header = list()
-    isHeaderSection = True
+    dataProv = list()
+    dataCCAA = list()
+    isDataSection = False
 
     for line in reader:
         n_row = n_row +1
-        
-        if n_row >= 8 and isHeaderSection:
-            line = cleanString(line)
-            ## When there is text  in the first column  data section starts 
-            if line[0]!=';':
-                isHeaderSection = False
-                break
-            if len(header)==0:
-                header = line.split(';')
-                for i in range(0, len(header)):
-                    h = cleanColumns(header[i])
-                    if len(h)==0:
-                        h = getPreviousNotNullString(header, i)
-                    header[i] = h
-            else:
-                aux = line.split(';')
-                h_aux = list()
-                for i in range(0, len(header)):
-#                    print str(n_row) +"--" + str(i)
-                    #print 'HEADER: ' + str(header)
-                    #print 'LINE: ' + str(aux)
-                    #print 'PREVIOUS: ' + h
-#                    if len(h)>0:
-#                    print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
-                    header[i] = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
-                    #h_aux.append(aux2)
-                        #print 'NEW: ' + aux2
-            #### TODO If there is a year on the Column put as first String????????????
-            print str(n_row) + str(header)
-        if not isHeaderSection:
-            break
-    return header
 
+        line = cleanString(line)
+        if n_row >= 8 and not isDataSection:
+            #print 'HEADER' + str(n_row)
+
+            #When there is text  in the first column  data section starts 
+            if line[0]!=';':
+                isDataSection = True
+
+        if n_row >= 8 and isDataSection:
+#            print 'DATA' + str(n_row) + '   ' + line
+            line = cleanString(line)
+
+            if len(line) == 0:
+                break
+            
+            row = line.split(';')
+            rowName = getCorrectProvName(row[0])
+            if rowName != None:
+                print "Encontre un PROV: " + rowName
+                row[0] = rowName
+                dataProv.append(row)
+            else:
+                print "Row ["+row[0]+"] is NOT a  Province"
+
+            rowName = getCorrectCCAAName(row[0])
+            if rowName != None:
+                print "Encontre un CCAA: " + rowName
+                row[0] = rowName
+                dataCCAA.append(row)
+            else:
+                print "Row ["+row[0]+"] is NOT a  CCAA"
+
+    ## Choose one of the 2 data 
+    if (len(dataCCAA)>=len(dataProv)):
+        data = dataCCAA
+    else:
+        data = dataProv
+
+    print data
+    return data
 
 #########################################################################################
+
+
 def identifyTags(s):
     ##### TODO
     ## It takes a dictionary of tags defined on a csv (tag;autotag;synonym1;..;synonymN)
@@ -356,19 +414,15 @@ def execute(csvfile):
     checkIfINE(csvfile)
 
     reader = open(csvfile, "rb")
-    #TODO Check if delimitir is ';'
-    # reader = csv.reader(open(csvfile, "rb"), delimiter=';')
-    # csvheader = reader.next()
 
-    getTitle(csvfile)
-    getUnits(csvfile)
-    getNotes(csvfile)
-    getDataSource(csvfile)
-    getCopyright(csvfile)
-    getReportColumns(csvfile)
-#    getReportData(csvfile)
-    getTags(csvfile)
-
+    title = getTitle(csvfile)
+    units = getUnits(csvfile)
+    notes = getNotes(csvfile)
+    source = getDataSource(csvfile)
+    copy = getCopyright(csvfile)
+    columns = getReportColumns(csvfile)
+    data = getReportData(csvfile)
+    tags = getTags(csvfile)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
