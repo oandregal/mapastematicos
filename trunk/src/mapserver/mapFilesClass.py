@@ -31,7 +31,7 @@ from dao import DAOClass
 class MapFilesClass:
 
     NRANGES = 5
-    bgcolor = "105 105 105"
+    bgcolor = "255 255 255"
 
 
     def __init__(self):
@@ -43,9 +43,9 @@ class MapFilesClass:
         f.close()
         return s
 
+
     def getRanges(self, table, column):
         rs = self.dao.getRS(table,column)
-
 
         if rs != "Error":
             values = self.dao.getValuesFromRS(rs)
@@ -66,8 +66,6 @@ class MapFilesClass:
     def generateMapFile(self, mapfileDir, name, table, column, size):
 
         ranges = self.getRanges(table, column)
-
-
 
         mapfilePath = os.path.abspath(mapfileDir + name + '.map')
         f = open (mapfilePath, "w")

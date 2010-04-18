@@ -28,6 +28,8 @@
 import mapscript
 import os
 from mapFilesClass import MapFilesClass
+from googleChartsClass import GoogleChartsClass
+
 # from scpClass import SCPClass
 
 class MapServerClass:
@@ -38,7 +40,9 @@ class MapServerClass:
         # self.scp = SCPClass()
         self.mapfileDir = 'mapDir/' # privado
         self.imageDir = 'imageDir/' # Respecto a la parte publica del apache de abredatos
+        self.statsDir = 'statsDir/'
         self.mfs = MapFilesClass()
+        self.gcc = GoogleChartsClass()
         self.host = "http://193.147.33.251"
 
 
@@ -96,20 +100,31 @@ class MapServerClass:
         self.mfs.generateMapFile (self.mapfileDir,tbName, table, column, self.tbImageSize)
         self.generateImage(tbName)
 
+        # GoogleCharts stats
+        statsName = mapName + '_stats'
+        rs = self.mfs.dao.getRS(table, column)
+        values = self.mfs.dao.getValuesFromRS(rs)
+        names = self.mfs.dao.getNamesFromRS(rs)
+        ranges = self.mfs.dao.getRangesFromValues(values, self.mfs.NRANGES, "foo")
+
+        # values = self.mfs.getValues(table, column)
+        self.gcc.generateImage(self.statsDir, statsName, values, names)
 
 
 
 
 
 
-msc = MapServerClass()
 
-mapName = "gris_oscuro"
-table = "ccaa_2"
-column = "pobl_2009"
 
-msc.generateAllImages(mapName, table, column)
-#valor = msc.getImageUri(mapName, table, column)
+# msc = MapServerClass()
+
+# mapName = "portada"
+# table = "ccaa"
+# column = "pobl_2009"
+
+# msc.generateAllImages(mapName, table, column)
+# #valor = msc.getImageUri(mapName, table, column)
 
 
 
