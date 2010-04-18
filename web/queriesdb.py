@@ -116,10 +116,16 @@ class QueriesDB:
         return id_user
 
     def getTags(self, id_mapa):
+        """
+        devuelve un diccionario con { id_tag1 = 'tagname1' , ... , id_tagn = 'tagnamen' }
+        devuelve None si ha habido error o no hay tags asociadas
+        """
 
         idtags_list   = []
         tagnames_list = []
+        result = {}
 
+        # Recupero los id_tags asociados a un mapa
         tablename = "tags_maps"
         sql_where = "id_map = " + str(id_mapa)
         try:
@@ -132,29 +138,34 @@ class QueriesDB:
         if len(idtags_list) < 1:
             return None
 
+        # Recupero el el par id_tag | tagname
         sql_where = ""
         sql_where = sql_where + "id_tag = " + str(idtags_list[0]['id_tag'])
-#        if len(idtags_list) > 0:
         for i in range(len(idtags_list)-1):
             sql_where = sql_where + " OR id_tag = " + str(idtags_list[i+1]['id_tag'])
 
         tablename = "tags"
+        sql_what = "id_tag, tagname"
         try:
             tagnames_list = self.dbcon.select(tablename,
+                                              what = sql_what,
                                               where = sql_where)
 
         except Exception as e:
             print e
 
         if len(tagnames_list) < 1:
-            aux = None
+            return None
 
-        if aux != None:
-            aux = []
-            for i in range(len(tagnames_list)):
-                aux.append(tagnames_list[i]['tagname'])
+        for i in range(len(tagnames_list)):
+            aux = tagnames_list[i]
+            key = aux['id_tag']
+            value = aux['tagname']
+            result[key] = value
 
-        return aux
+        return result
+
+
 
     def getTitle(self, id_mapa):
         # select t2.title from map as t1, report as t2 where t1.id_map = '2' AND t1.id_report = t2.id_report;
@@ -192,23 +203,26 @@ if __name__ == "__main__":
     q = QueriesDB(db_config)
 
     # INSERT TESTS
-    id_report = q.addReport(report_data)
-    print "Created report nro " + str(id_report)
+    # id_report = q.addReport(report_data)
+    # print "Created report nro " + str(id_report)
 
-    id_map    = q.addMap(map_data, tags)
-    print "Created map nro " + str(id_map)
+    # id_map    = q.addMap(map_data, tags)
+    # print "Created map nro " + str(id_map)
 
-    id_user   = q.addUser(user['nick'],
-                          user['email'])
-    print "Created user nro " + str(id_user)
+    # id_user   = q.addUser(user['nick'],
+    #                       user['email'])
+    # print "Created user nro " + str(id_user)
 
     # SELECT TESTS
     # id_map = 12345678901234567890123456789012
     # id_map = 12
-    tag_list = q.getTags(id_map)
-    print tag_list
+    # tag_dict = q.getTags(id_map)
+    # print str(tag_dict)
 
-    getTitleTest
-    t = q.getTitle(id_map)
-    print t
+
+
+
+    # getTitleTest
+    # t = q.getTitle(id_map)
+    # print t
 
