@@ -129,11 +129,14 @@ class QueriesDB:
         except Exception as e:
             print e
 
+        if len(idtags_list) < 1:
+            return None
+
         sql_where = ""
         sql_where = sql_where + "id_tag = " + str(idtags_list[0]['id_tag'])
-        if len(idtags_list) > 0:
-            for i in range(len(idtags_list)-1):
-                sql_where = sql_where + " OR id_tag = " + str(idtags_list[i+1]['id_tag'])
+#        if len(idtags_list) > 0:
+        for i in range(len(idtags_list)-1):
+            sql_where = sql_where + " OR id_tag = " + str(idtags_list[i+1]['id_tag'])
 
         tablename = "tags"
         try:
@@ -142,6 +145,9 @@ class QueriesDB:
 
         except Exception as e:
             print e
+
+        if len(tagnames_list) < 1:
+            return None
 
         aux = []
         for i in range(len(tagnames_list)):
@@ -155,19 +161,22 @@ class QueriesDB:
         sql_what = "t2.title"
         sql_table = "map as t1, report as t2"
         sql_where = "t1.id_map = " + str(id_mapa) + " AND t1.id_report = t2.id_report;"
-        title = ""
+        title = None
+        rs = None
         try:
             rs = self.dbcon.select(sql_table,
                                    what = sql_what,
                                    where = sql_where)
-            title = rs[0]
         except Exception as e:
-            title = "Some error happens"
             print e
+            return title
 
-        # return rs[0]['title'] # para devolver unicamente el script
+        if len(rs) > 0:
+            title = rs[0]['title']
+            if len(title) <= 0:
+                title = None
+
         return title
-
 
 
 
@@ -181,21 +190,24 @@ if __name__ == "__main__":
 
     q = QueriesDB(db_config)
 
-    #INSERT TESTS
-    # id_report = q.addReport(report_data)
-    # print "Created report nro " + str(id_report)
+    # INSERT TESTS
+    id_report = q.addReport(report_data)
+    print "Created report nro " + str(id_report)
 
-    # id_map    = q.addMap(map_data, tags)
-    # print "Created map nro " + str(id_map)
+    id_map    = q.addMap(map_data, tags)
+    print "Created map nro " + str(id_map)
 
-    # id_user   = q.addUser(user['nick'],
-    #                       user['email'])
-    # print "Created user nro " + str(id_user)
+    id_user   = q.addUser(user['nick'],
+                          user['email'])
+    print "Created user nro " + str(id_user)
 
-    #SELECT TESTS
-    # tag_list = q.getTags(id_map)
-    # print tag_list
+    # SELECT TESTS
+    # id_map = 12345678901234567890123456789012
+    # id_map = 12
+    tag_list = q.getTags(id_map)
+    print tag_list
 
-    # getTitleTest
-    # t = q.getTitle(id_map)
-    # print t['title']
+    getTitleTest
+    t = q.getTitle(id_map)
+    print t
+
