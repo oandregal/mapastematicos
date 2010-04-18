@@ -38,7 +38,7 @@ a:active {
 
 body { 
 	font-family: Georgia,serif,Arial,sans-serif;
-	color: #000000;
+	color: #696969;
 	font-size: 16px;
 	}
 
@@ -46,7 +46,6 @@ body {
 
 #wrapper {
 
-	background-image:url('/static/img/footer2.png');
 	background-repeat: repeat-x;
 	background-position: bottom;
 	}
@@ -55,8 +54,9 @@ body {
 
 body { 
 	margin:0 0 0 0; /* top right bottom left */
+	background-image:url('/static/img/headerbar.png');
 	background-repeat: repeat-x;
-	background-position: bottom;
+	background-position: top;
 
 	clear: both;
 
@@ -76,15 +76,10 @@ th {
 	text-font: bold;
 	}
 
-#logo {
-	background-image: url('/static/img/logo_mate.png');
-	width:  842px;
-	height: 595px;
-	}
 
 #presentacion {
-	background-image: url('/static/img/mate_header.png');
-	height:400px;
+	background-image: url('/static/img/header_mapa.png');
+	height:182px;
 	}
 
 #presentacion h1 { 
@@ -126,7 +121,6 @@ th {
 	}
 
 #seccion-sidebar { 
-	background-color: #e3d185;
 	padding-left: 2em;
 	padding-right: 0em;
 	padding-bottom: 2em;
@@ -148,7 +142,7 @@ th {
 	}
 
 .sidebar {
-	background-color: #90ee90;
+	background-color: #c0deed;
 }
 
 .content {

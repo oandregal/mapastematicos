@@ -39,7 +39,6 @@ body {
 
 #wrapper {
 
-	background-image:url('../img/footer2.png');
 	background-repeat: repeat-x;
 	background-position: bottom;
 	}
@@ -48,8 +47,9 @@ body {
 
 body { 
 	margin:0 0 0 0; /* top right bottom left */
+	background-image:url('/static/img/headerbar.png');
 	background-repeat: repeat-x;
-	background-position: bottom;
+	background-position: top;
 
 	clear: both;
 
@@ -70,13 +70,13 @@ th {
 	}
 
 #logo {
-	background-image: url('../img/logo_mate.png');
+	background-image: url('/static/img/header_mate.png');
 	width:  842px;
 	height: 595px;
 	}
 
 #presentacion {
-	background-image: url('../img/header_mapa.png');
+	background-image: url('/static/img/header_mapa.png');
 	height:182px;
 	}
 
@@ -123,7 +123,6 @@ th {
 	}
 
 #seccion-sidebar { 
-	background-color: #e3d185;
 	padding-left: 2em;
 	padding-right: 0em;
 	padding-bottom: 2em;
@@ -145,7 +144,7 @@ th {
 	}
 
 .sidebar {
-	background-color: #90ee90;
+	background-color: #c0deed;
 }
 
 .content {
