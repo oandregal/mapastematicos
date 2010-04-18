@@ -22,8 +22,8 @@
 # AUTHORS:
 # Francisco Puga Alonso <fran.puga@gmail.com> <http://conocimientoabierto.es>
 # Andres Maneiro Boga <andres.maneiro@gmail.com> <http://nosolosoftware.es>
-# Adrián Eiris
-# Nacho Varela
+# Adrián Eiris Torres <adrianet82@gmail.com> <http://jauladepalabras.netii.net/>
+# Nacho Varela  García <nachouve@gmail.com> <http://libresig.blogspot.com/>
 
 import os
 
@@ -37,7 +37,7 @@ class MapFilesClass:
 
 
     def generateMapFile(self, mapfileDir, name, table, column):
-        
+
         mapfilePath = os.path.abspath(mapfileDir + name + '.map')
         f = open (mapfilePath, "w")
         f.write ('MAP\n')
@@ -58,14 +58,14 @@ class MapFilesClass:
 
          # Definir el shape
         f.write ('LAYER\n')
-        f.write ('STATUS default\n') 
+        f.write ('STATUS default\n')
         f.write ('TYPE polygon\n')
         # f.write ('LABELITEM "MASA"') # Campo del shape que contiene la etiqueta de cada feature
 
         f.write ('CONNECTIONTYPE POSTGIS\n')
         f.write ('CONNECTION ' + self.getConnectionString() + '\n')
-        f.write ('DATA "the_geom from gis_schema.' + table +'"\n')  
-  
+        f.write ('DATA "the_geom from gis_schema.' + table +'"\n')
+
       # para cada rango que quiera hacer
 
         f.write('CLASS\n')
@@ -87,10 +87,10 @@ class MapFilesClass:
         f.write ('END\n') # CLASS
 
         # HAY QUE PONER UN CLASS AL FINAL DEL BUCLE POR SI SE QUEDA ALGUNO FUERA
-              
+
         f.write ('END\n') # LAYER
 
-        
+
         f.write ('END\n') # NAME
-        
+
         f.close()

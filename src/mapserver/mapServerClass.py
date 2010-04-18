@@ -22,8 +22,8 @@
 # AUTHORS:
 # Francisco Puga Alonso <fran.puga@gmail.com> <http://conocimientoabierto.es>
 # Andres Maneiro Boga <andres.maneiro@gmail.com> <http://nosolosoftware.es>
-# Adrián Eiris
-# Nacho Varela
+# Adrián Eiris Torres <adrianet82@gmail.com> <http://jauladepalabras.netii.net/>
+# Nacho Varela  García <nachouve@gmail.com> <http://libresig.blogspot.com/>
 
 import mapscript
 import os
@@ -38,21 +38,21 @@ class MapServerClass:
         self.imageDir = 'imageDir/' # Respecto a la parte publica del apache de abredatos
         self.mfs = MapFilesClass()
         self.host = "http://193.147.33.251"
-        
-      
+
+
     def generateImage(self, mapName):
 
         mapfilePath = os.path.abspath(self.mapfileDir + mapName + '.map')
-        
+
         map = mapscript.mapObj(mapfilePath)
         mapImage = map.draw()
         imagePath = os.path.abspath(self.imageDir + mapName + '.' + mapImage.format.extension)
         mapImage.save(imagePath)
         return imagePath
-        
+
 
     def getImageUri(self,mapName, table, column):
-        
+
         try:
             self.mfs.generateMapFile (self.mapfileDir, mapName, table, column)
             imagePath = self.generateImage(mapName)
@@ -60,8 +60,8 @@ class MapServerClass:
             return uri
         except:
             return "Error"
-        
-        
+
+
 
     # def uploadImage(self, imagePath):
     #     result = True
@@ -76,9 +76,9 @@ class MapServerClass:
     #     # finally:
     #     #   return result
 
-    
-            
-            
+
+
+
 msc = MapServerClass()
 
 mapName = "foo"
