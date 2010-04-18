@@ -40,20 +40,26 @@ class Map:
 
 class Tag:
     def GET(self, id_tag):
-        id_tag = None
-        if id_tag == None:
+        #q = QueriesDB(db_config)
+        #resultset = q.getResultsByTag(id_tag)
+        resultset = {'12345678901234567890123456789012': 'titulo 1 del mapa',
+                     '12345678901234567890123456789012': 'titulo 2 del mapa',
+                     '12345678901234567890123456789012': 'titulo 3 del mapa'
+                     }
+        if resultset == None:
             msg = "Lo sentimos, pero parece que no tenemos la etiqueta que nos pide."
             return render.notfound(msg)
-        return render.search()
+        return render.search(resultset)
 
 
 class Search:
     def GET(self):
-        id_search = None
-        if id_search == None:
+        resultset = {"1": "oe",
+                     "2": "eo"}
+        if resultset == None:
             msg = "Lo sentimos, pero parece que no hemos encontrado nada como lo que nos pide."
             return render.notfound(msg)
-        return render.search()
+        return render.search(resultset)
 
 
 
