@@ -48,8 +48,8 @@ class QueriesDB:
                                           footnotes       = report_data['footnotes'],
                                           data_copyright  = report_data['data_copyright'])
 
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         return id_report
 
@@ -65,8 +65,8 @@ class QueriesDB:
                                    stats     = map_data['id_map'] + "_stats" + ".png",
                                    map_name  = map_data['map_name'])
 
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         self.addTagsToMap(map_data['id_map'], tags)
         return map_data['id_map']
@@ -85,8 +85,8 @@ class QueriesDB:
         try:
             id_tag = self.dbcon.insert(tablename,
                                        tagname   = tag)
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         return id_tag
 
@@ -98,8 +98,8 @@ class QueriesDB:
             id = self.dbcon.insert(tablename,
                                    id_map = idx_map,
                                    id_tag = idx_tag)
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         return id
 
@@ -110,8 +110,8 @@ class QueriesDB:
             id_user = self.dbcon.insert(tablename,
                                         nick  = usernick,
                                         email = useremail)
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         return id_user
 
@@ -132,8 +132,8 @@ class QueriesDB:
             idtags_list = self.dbcon.select(tablename,
                                             where = sql_where)
 
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         if len(idtags_list) < 1:
             return None
@@ -151,8 +151,8 @@ class QueriesDB:
                                               what = sql_what,
                                               where = sql_where)
 
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         if len(tagnames_list) < 1:
             return None
@@ -179,8 +179,8 @@ class QueriesDB:
             rs = self.dbcon.select(sql_table,
                                    what = sql_what,
                                    where = sql_where)
-        except Exception as e:
-            print e
+        except Exception:
+            pass
             return title
 
         if len(rs) > 0:
@@ -206,8 +206,8 @@ class QueriesDB:
             rs = self.dbcon.select(sql_tables,
                                    what = sql_what,
                                    where = sql_where)
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
         if len(rs) < 1:
             return None
@@ -242,8 +242,8 @@ class QueriesDB:
                                    order = sql_order,
                                    limit = sql_limit)
 
-        except Exception as e:
-            print e
+        except Exception:
+            pass
 
 
         if len(rs) < 1:
@@ -270,16 +270,16 @@ if __name__ == "__main__":
 
     q = QueriesDB(db_config)
 
-    # INSERT TESTS
-    # id_report = q.addReport(report_data)
-    # print "Created report nro " + str(id_report)
+    #INSERT TESTS
+    id_report = q.addReport(report_data)
+    print "Created report nro " + str(id_report)
 
-    # id_map    = q.addMap(map_data, tags)
-    # print "Created map nro " + str(id_map)
+    id_map    = q.addMap(map_data, tags)
+    print "Created map nro " + str(id_map)
 
-    # id_user   = q.addUser(user['nick'],
-    #                       user['email'])
-    # print "Created user nro " + str(id_user)
+    id_user   = q.addUser(user['nick'],
+                          user['email'])
+    print "Created user nro " + str(id_user)
 
     # SELECT TESTS
     # id_map = 12345678901234567890123456789012
