@@ -22,7 +22,8 @@ app = web.application(urls, globals())
 
 class Index:
     def GET(self):
-        return render.index()
+        name = ""
+        return render.index(name)
 
 
 class Map:
