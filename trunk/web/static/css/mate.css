@@ -1,99 +1,157 @@
+/* Table of contents ---------------------------------------
+
+	Typography
+	Body
+	-ul
+	-table
+	-th
+	logo
+	---------------
+	Header
+	Intro
+	Navigation
+	Content
+	Sidenav
+	Sidebar
+	Credit
+
+*/
+
+/* Typography   -------------------------------------------- */
+
+a:link {
+	color: #90ee90;
+	text-decoration: none;
+	}
+a:visited {
+	color: #999999;
+	text-decoration: none;
+	}
+a:hover {
+	color: #808080;
+	text-decoration: none;
+	}
+a:active {
+	color: #999999;
+	text-decoration: none;
+	}
+
 body { 
-       background-color: #f1f1f1;
-       color: #1a1a1a;
-       }
+	font-family: Georgia,serif,Arial,sans-serif;
+	color: #000000;
+	font-size: 16px;
+	}
+
+/* Wrapper   -------------------------------------------- */
+
+#wrapper {
+
+	background-image:url('../images/footer2.png');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	}
+
+/* Body   -------------------------------------------- */
+
+body { 
+	margin:0 0 0 0; /* top right bottom left */
+	background-repeat: repeat-x;
+	background-position: bottom;
+
+	clear: both;
+
+	}
 
 ul { 
-     list-style-type: square;
-     }
+	list-style-type: square;
+	}
 
 table, th, td { 
-                border: 0px;
- }
+	border: 0px;
+	}
 
 th { 
-     padding: 5px;
-     text-align: center;
-     text-font: bold;
- }
+	padding: 5px;
+	text-align: center;
+	text-font: bold;
+	}
 
 #logo {
-        background-image: url('../img/ghandalf.png');
-        width:  842px;
-        height: 595px;
-        }
+	background-image: url('../images/logo_mate.png');
+	width:  842px;
+	height: 595px;
+	}
 
 #presentacion {
-                background-color: #9ab54f;
-                }
+	background-image: url('../images/mate_header.png');
+	height:400px;
+	}
 
 #presentacion h1 { 
-                   text-align: center;
-                   }
+	text-align: center;
+	}
 
 #presentacion p{ 
-                 padding-left: 2em;
-                 padding-right: 2em;
-                 }
-
+	padding-left: 2em;
+	padding-right: 2em;
+	}
 
 #aviso {
-         margin-top: 1em;
-         background-color: red;
-         }
+	margin-top: 1em;
+	background-color: red;
+	}
 
 #aviso p{
-          padding-left: 2em;
-          padding-right: 2em;
-          padding-top: 1em;
-          text-align: center;
-          }
+	padding-left: 2em;
+	padding-right: 2em;
+	padding-top: 1em;
+	text-align: center;
+	}
 
 #menu { 
-        background-color: #e3d185;
-        padding-left: 3em;
-        padding-right: 2em;
-        padding-bottom: 2em;
-        margin-top: 1em;
+
+	padding-left: 3em;
+	padding-right: 2em;
+	padding-bottom: 2em;
+	margin-top: 1em;
         }
 
 #menu img{
-         padding-top: 1em;
+	/*padding-top: 1em;*/
 }
 
 #pedepaxina { 
-              background-color: #1c1c1c;
-              font-size: medium;
-              color: #ccc;
-              }
-
-#pedepaxina p{ 
-               padding-top: 1em;
-               text-align: center;
-               }
-
-#pedepaxina a{ 
-               color: #fff;
-               }
+	margin-top:1em;
+	margin-bottom:1em;
+	}
 
 #seccion-sidebar { 
-                   background-color: #e3d185;
-                   padding-left: 2em;
-                   padding-right: 0em;
-                   padding-bottom: 2em;
-                   margin-top: 1em;
-                   }
-
+	background-color: #e3d185;
+	padding-left: 2em;
+	padding-right: 0em;
+	padding-bottom: 2em;
+	margin-top: 1em;
+	}
+	
 #seccion-contido { 
-                   background-color: #e3d185;
-                   padding-left: 2em;
-                   padding-right: 0em;
-                   padding-left: 3em;
-                   padding-bottom: 2em;
-                   margin-top: 1em;
-                   }
-
+	background-color: #e3d185;
+	padding-left: 2em;
+	padding-right: 0em;
+	padding-left: 3em;
+	padding-bottom: 2em;
+	margin-top: 1em;
+	}
+	
 .bordred {
-           -moz-border-radius: 5px;
-           -webkit-border-radius: 5px;
- }
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	}
+
+.sidebar {
+	background-color: #90ee90;
+}
+
+.content {
+	/*background-color: #00bfe2;*/	
+	}
+
