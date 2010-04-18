@@ -14,7 +14,7 @@ map_data = {'table_csv'  : "table",
             'column_name': "column"}
 
 report_data = {'title'          : "Title",
-               'description'    : "una descripción",
+               'description'    : "una descripcion",
                'units'          : "unidades",
                'region_analysis': "CCAA",
                'id_user'        : 0,
