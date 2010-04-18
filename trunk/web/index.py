@@ -15,7 +15,9 @@ urls = (
         '/', 'Index',
         '/map/(.+)', 'Map',
         '/tag/(.+)', 'Tag',
-        '/search', 'Search'
+        '/search', 'Search',
+        '/thanks', 'Thanks',
+        '/about', 'About'
 )
 
 app = web.application(urls, globals())
@@ -25,6 +27,14 @@ class Index:
         q = QueriesDB(db_config)
         resultset = q.getMoreViewedTags()
         return render.index(resultset)
+
+class Thanks:
+    def GET(self):
+        return render.gracias()
+
+class About:
+    def GET(self):
+        return render.about()
 
 
 class Map:
@@ -40,7 +50,7 @@ class Map:
         else:
             title = ""
             tagnames = {"None":"None"}
-            return render.map(vars, id_map + ".png", id_map + "_thum.png")
+            return render.map(vars, id_map + ".png", id_map + "_stats.png")
 
 
 class Tag:
