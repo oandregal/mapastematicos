@@ -31,15 +31,18 @@ $def with (vars)
 </div>
 
 <div id="menu" class="col8 bordred content">
-  <h4>Tags</h4>
-    <ul>
-    $for i in range(len(vars)):
-       <li><a href="/tag/$vars.keys()[i]">$vars.values()[i]</a></li>
 
-      <li><a href="/tag/1"></a>Tag 1</li>
-      <li><a href="/tag/2"></a>Tag 2</li>
-      <li><a href="/tag/1"></a>Tag 3</li>            
-    </ul>
+  <h4>Galería</h4>
+  <table>
+ 	  <tr>
+     $for i in range(len(vars)):
+        $if i%4 == 0:
+        	  </tr><tr>
+	     <th><a href="/map/$vars.keys()[i]"><img src="/static/img/$vars.keys()[i]_thumb.png" alt=""/>
+        <span>$vars.values()[i]</span></a></th>
+     
+     </tr>
+  </table>
 </div>
 
 <div class="footer"><p></p></div>
