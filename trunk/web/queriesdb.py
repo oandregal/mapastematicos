@@ -162,10 +162,7 @@ if __name__ == "__main__":
     from tests import report_data, map_data, tags
     from tests import user
 
-    q = QueriesDB(db_config['dbhost'],
-                  db_config['dbname'],
-                  db_config['dbuser'],
-                  db_config['dbpass'])
+    q = QueriesDB(db_config)
 
 #    #INSERT TESTS
 #    id_report = q.addReport(report_data, map_data, tags)
