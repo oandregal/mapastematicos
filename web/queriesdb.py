@@ -121,6 +121,37 @@ class QueriesDB:
 
         return id_user
 
+    def getTags(self, id_mapa):
+
+        idtags_list   = []
+        tagnames_list = []
+
+        tablename = "tags_maps"
+        sql_where = "id_map = " + str(id_mapa)
+        try:
+            idtags_list = self.dbcon.select(tablename,
+                                         where = sql_where)
+
+        except Exception as e:
+            print e
+
+        sql_where = ""
+        sql_where = sql_where + "id_tag = " + str(idtags_list[0]['id_tag'])
+        if len(idtags_list) > 0:
+            for i in range(len(idtags_list)-1):
+                sql_where = sql_where + " OR id_tag = " + str(idtags_list[i+1]['id_tag'])
+
+        tablename = "tags"
+        try:
+            tagnames_list = self.dbcon.select(tablename,
+                                              where = sql_where)
+
+        except Exception as e:
+            print e
+
+        return tagnames_list
+
+
 if __name__ == "__main__":
 
     from tests import db_config
@@ -132,12 +163,20 @@ if __name__ == "__main__":
                   db_config['dbuser'],
                   db_config['dbpass'])
 
-    id_report = q.addReport(report_data, map_data, tags)
-    print "Created report nro " + str(id_report)
+#    #INSERT TESTS
+#    id_report = q.addReport(report_data, map_data, tags)
+#    print "Created report nro " + str(id_report)
+#
+#    id_map    = q.addMap(id_report, map_data, tags)
+#    print "Created map nro " + str(id_map)
+#
+#    id_user   = q.addUser(user['nick'],
+#                          user['email'])
+#    print "Created user nro " + str(id_user)
 
-    id_map    = q.addMap(id_report, map_data, tags)
-    print "Created map nro " + str(id_map)
+    #SELECT TESTS
+    tag_list = q.getTags(2)
+    print len(tag_list)
+    for i in range(len(tag_list)):
+        print str(tag_list[i]) + "\n"
 
-    id_user   = q.addUser(user['nick'],
-                          user['email'])
-    print "Created user nro " + str(id_user)

@@ -12,9 +12,10 @@ sys.path.append('/home/mapastematicos/pylibs/')
 render = web.template.render('templates/')
 
 urls = (
-        "/", "Index",
-        "/map", "Map",
-        "/search", "Search"
+        '/', 'Index',
+        '/map/(.+)', 'Map',
+        '/tag', 'Tag',
+        '/search', 'Search'
 )
 
 app = web.application(urls, globals())
@@ -24,14 +25,21 @@ class Index:
         return render.index()
 
 
-class Map():
+class Map:
+    def GET(self, vars):
+        return render.map(format(vars))
+
+
+class Tag:
     def GET(self):
-        return render.map(id_report)
+        return render.search()
 
 
 class Search:
     def GET(self):
         return render.search()
+
+
 
 if __name__ == "__main__":
     app.run() #this is normally only called from dispatch.cgi
