@@ -48,6 +48,7 @@ def usage():
     print('IMPORTANT: On the same directory of this script should be placed 3 CSV files of dictionaries:  "dict_provincias.csv", "dict_ccaa.csv" and "dict_tags.csv"')
 
 def main(argv):
+
     try:
         opts, args = getopt.getopt(argv, "f:", ["help","ayuda"])
     except getopt.GetoptError:
@@ -181,6 +182,10 @@ def getNotes(csvfile):
                     aux = aux[4:]
                 if (aux.startswith('1 .-')):
                     aux = aux[5:]
+                if (aux.startswith('1-')):
+                    aux = aux[3:]
+                if (aux.startswith('1.')):
+                    aux = aux[3:]
                 if (aux[1] == ')'):
                     aux = aux[2:]
                 aux = cleanString(aux)
@@ -211,17 +216,152 @@ def getTags(csvfile):
     # TODO It is always at the row 1 and 2
     reader = open(csvfile, "rb")
     n_row = 0
-    tags = list()
+    tags = set()
     ## TODO FIELD????????????????????????????????
     for line in reader:
         n_row = n_row +1
         if n_row < 5:
             aux = cleanString(line)
-            tags = identifyTags(aux)
-            print '--> TAG: ' + aux
+            if (len(aux)>1):
+                print 'Procesing TAG: ' + aux
+                for t in identifyTags(aux):
+                    tags.add(t)
+                print '--> TAG: ' + str(tags)
         else: 
             break
     return aux
+
+
+def createTagDictionary():
+    """" Opens a file with Tags (Categories, keywords, etc.) and identifiers and  creates a dict(identifier, list(tags))"""
+    ## TAG_CSV_FILE contains:
+    # 1 column: Tag
+    # 2 column: Tag2
+    #2>-column: identifiers
+
+    global tagDict
+    global TAG_DICT_FILE
+
+    if tagDict != None:
+        return tagDict
+    else:
+        tagDict = dict()
+        print(TAG_DICT_FILE)
+        dict_r = open(TAG_DICT_FILE, 'rb')
+        for line in dict_r:
+            line = line.replace('"', '')
+            aux = line.split(';')
+            tag1 = ''
+            tag2 = ''
+            if len(aux)>0:
+                tag1 = cleanString(aux[0])
+                tag2 = cleanString(aux[1])
+                tag_list = list()
+                tag_list.append(tag1)
+                if (len(tag2)>1):
+                    tag_list.append(tag2)
+                for s in aux[2:]:
+                    ##### OJO CON ENCODING
+                    s  =  cleanEncodingLower(s)
+                    if len(s)>0:
+                        if tagDict.has_key(s):
+                            tag_l = tagDict[s]
+                            for t in tag_list:
+                                print (t)
+                                #tag_l.append(t)
+                        else:
+                            tagDict[s] = tag_list
+            else:
+                pass
+
+#    print("\n TTTTTAAAAAGGGG \n")
+#    print(tagDict)
+#    print("\n\n")
+    return tagDict
+
+def createCCAADictionary():
+    """" Opens a file with CCAA and identifiers and  creates a dict"""
+
+    global ccaaDict
+    global CCAA_DICT_FILE
+
+    if ccaaDict != None:
+        return ccaaDict
+    else:
+        ccaaDict = dict()
+        print(CCAA_DICT_FILE)
+        dict_r = open(CCAA_DICT_FILE, 'rb')
+        for line in dict_r:
+            line = line.replace('"', '')
+            aux = line.split(';')
+            name = ''
+            if len(aux)>0:
+                name = cleanString(aux[0])
+                for s in aux[1:]:
+                    ##### OJO CON ENCODING
+                    s  =  cleanEncodingLower(s)
+                    if len(s)>0:
+                        ccaaDict[s] = name
+            else:
+                pass
+
+#    print("\n\n")
+#    print(provDict)
+#    print("\n\n")
+    return ccaaDict
+
+def createProvDictionary():
+    """" Opens a file with Provinces and identifiers and  creates a dict"""
+
+    global provDict
+    global PROV_DICT_FILE
+
+    if provDict != None:
+        return provDict
+    else:
+        provDict = dict()
+        print(PROV_DICT_FILE)
+        dict_r = open(PROV_DICT_FILE, 'rb')
+        for line in dict_r:
+            line = line.replace('"', '')
+            aux = line.split(';')
+            name = ''
+            if len(aux)>0:
+                name = cleanString(aux[0])
+                for s in aux[1:]:
+                    ##### OJO CON ENCODING
+                    s = cleanEncodingLower(s)
+                    if len(s)>0:
+                        provDict[s] = name
+            else:
+                pass
+
+#    print("\n\n")
+#    print(provDict)
+#    print("\n\n")
+    return provDict
+
+
+def identifyTags(s):
+    
+    tags = set()
+    tagDict = createTagDictionary()
+
+    s = cleanEncodingLower(s)
+
+    if (len(s)<3):
+        return None
+
+    for k in tagDict.keys():
+        #print s + '  ' +  k + '  ' + str(s.find(k))
+        if s.find(k) != -1:
+            aux_t = tagDict.get(k)
+            for t in aux_t:
+                tags.add(t)
+
+    return tags
+
+
 
 
 ########################################################################################
@@ -271,81 +411,17 @@ def getReportColumns(csvfile):
                     h = header[i] + '-' + cleanColumns(getPreviousNotNullString(aux, i))
                     #print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
                     header[i] = h
-            #### TODO If there is a year on the Column put as first String????????????
+            #### TODO If there is a year on the Column put as first String?????
             print str(n_row) + str(header)
         if not isHeaderSection:
             break
     return header
 
-
-def getCCAADictionary():
-    """" Opens a file with CCAA and identifiers and  creates a dict"""
-
-    global ccaaDict
-    global CCAA_DICT_FILE
-
-    if ccaaDict != None:
-        return ccaaDict
-    else:
-        ccaaDict = dict()
-        print(CCAA_DICT_FILE)
-        dict_r = open(CCAA_DICT_FILE, 'rb')
-        for line in dict_r:
-            line = line.replace('"', '')
-            aux = line.split(';')
-            name = ''
-            if len(aux)>0:
-                name = cleanString(aux[0])
-                for s in aux[1:]:
-                    ##### OJO CON ENCODING
-                    s  =  cleanEncodingLower(s)
-                    if len(s)>0:
-                        ccaaDict[s] = name
-            else:
-                pass
-
-#    print("\n\n")
-#    print(provDict)
-#    print("\n\n")
-    return ccaaDict
-
-def getProvDictionary():
-    """" Opens a file with Provinces and identifiers and  creates a dict"""
-
-    global provDict
-    global PROV_DICT_FILE
-
-    if provDict != None:
-        return provDict
-    else:
-        provDict = dict()
-        print(PROV_DICT_FILE)
-        dict_r = open(PROV_DICT_FILE, 'rb')
-        for line in dict_r:
-            line = line.replace('"', '')
-            aux = line.split(';')
-            name = ''
-            if len(aux)>0:
-                name = cleanString(aux[0])
-                for s in aux[1:]:
-                    ##### OJO CON ENCODING
-                    s = cleanEncodingLower(s)
-                    if len(s)>0:
-                        provDict[s] = name
-            else:
-                pass
-
-#    print("\n\n")
-#    print(provDict)
-#    print("\n\n")
-    return provDict
-
-
 def getCorrectProvName(s):
 
     s = cleanString(s).lower() 
 
-    provDict  =  getProvDictionary()
+    provDict  =  createProvDictionary()
     for k in provDict.keys():
         #print s + '  ' +  k + '  ' + str(s.find(k))
         if s.find(k) != -1:
@@ -357,17 +433,13 @@ def getCorrectCCAAName(s):
 
     s = cleanString(s).lower() 
 
-    ccaaDict  =  getCCAADictionary()
+    ccaaDict  =  createCCAADictionary()
     for k in ccaaDict.keys():
         #print s + '  ' +  k + '  ' + str(s.find(k))
         if s.find(k) != -1:
             return ccaaDict.get(k)
     return None
 
-
-###################################################### TODO
-###################################################### TODO
-###################################################### TODO make the dict CCAAA!!!!
 
 def getReportData(csvfile):
     """Get report data of the table."""
@@ -421,16 +493,10 @@ def getReportData(csvfile):
         data = dataProv
 
     print data
+    #### TODO Cell with '--' == None 
     return data
 
 #########################################################################################
-
-
-def identifyTags(s):
-    ##### TODO
-    ## It takes a dictionary of tags defined on a csv (tag;autotag;synonym1;..;synonymN)
-    tags = list()
-    return tags
 
 
 def execute(csvfile):
@@ -447,6 +513,8 @@ def execute(csvfile):
     columns = getReportColumns(csvfile)
     data = getReportData(csvfile)
     tags = getTags(csvfile)
+    
+    print('\n\n')
 
 if __name__ == "__main__":
     main(sys.argv[1:])
