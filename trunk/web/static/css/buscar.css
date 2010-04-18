@@ -13,11 +13,11 @@
 /* Typography   -------------------------------------------- */
 
 a:link {
-	color: #90ee90;
+	color: #65aa65;
 	text-decoration: none;
 	}
 a:visited {
-	color: #999999;
+	color: #65aa65;
 	text-decoration: none;
 	}
 a:hover {
@@ -149,4 +149,9 @@ th {
 .content {
 	/*background-color: #00bfe2;*/	
 	}
-
+.sidebar li {
+	border-bottom-style: dotted;
+	border-width: 1px;
+	border-color: #808080;
+	list-style: none;
+}

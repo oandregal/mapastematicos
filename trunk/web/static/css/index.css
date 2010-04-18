@@ -8,14 +8,15 @@ body {
        color: #FFF;
  }
 
+
 li > a:link {
-    color: #000;
-    text-decoration: none;
-    }
-li> a:visited {
-    color: #000;
-    text-decoration: none;
-    }
+	color: #65aa65;
+	text-decoration: none;
+	}
+li > a:visited {
+	color: #65aa65;
+	text-decoration: none;
+	}
 li> a:hover {
     color: #FFF;
     }
@@ -23,3 +24,9 @@ li> a:active {
     color: #FFF;
     text-decoration: none;
     }
+.sidebar li {
+	border-bottom-style: dotted;
+	border-width: 1px;
+	border-color: #808080;
+	list-style: none;
+}
