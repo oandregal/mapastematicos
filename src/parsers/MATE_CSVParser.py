@@ -28,7 +28,7 @@
 ## Parser for CSV INE files (abredatos.org)
 
 import getopt
-import sys, os, codecs
+import sys, os, hashlib
 
 PROV_DICT_FILE = 'dict_provincias.csv'
 CCAA_DICT_FILE = 'dict_ccaa.csv'
@@ -186,8 +186,9 @@ def getNotes(csvfile):
                     aux = aux[3:]
                 if (aux.startswith('1.')):
                     aux = aux[3:]
-                if (aux[1] == ')'):
-                    aux = aux[2:]
+                if (len(aux)>1):
+                    if (aux[1] == ')'):
+                        aux = aux[2:]
                 aux = cleanString(aux)
                 ####################
                 notesText = notesText + aux + '\n'
@@ -498,13 +499,21 @@ def getReportData(csvfile):
 
 #########################################################################################
 
+def getID(arg1, arg2):
+
+    h = hashlib.md5()
+    h.update(str(arg1))
+    h.update(str(arg2))
+
+    return h.hexdigest()
+
 
 def execute(csvfile):
 
+    ## 
     checkIfINE(csvfile)
 
-    reader = open(csvfile, "rb")
-
+   ##PARSING SECTION
     title = getTitle(csvfile)
     units = getUnits(csvfile)
     notes = getNotes(csvfile)
@@ -513,7 +522,11 @@ def execute(csvfile):
     columns = getReportColumns(csvfile)
     data = getReportData(csvfile)
     tags = getTags(csvfile)
-    
+
+    ## DATA BASE
+    report_id = getID(title, columns)
+    print('\n ID[[' + report_id + ']]')
+
     print('\n\n')
 
 if __name__ == "__main__":
