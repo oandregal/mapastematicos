@@ -30,6 +30,10 @@
 import getopt
 import sys, os, hashlib
 
+sys.path.append('../dao')
+from postgis_dao  import postgis_dao
+
+
 PROV_DICT_FILE = 'dict_provincias.csv'
 CCAA_DICT_FILE = 'dict_ccaa.csv'
 TAG_DICT_FILE = 'dict_tags.csv'
@@ -41,6 +45,8 @@ ccaaDict = None
 # Dictionary of TAGS and string identifiers of them
 tagDict = None
 
+# Define if it is a ComunidadAutonoma map (CCAA)or Province map (PROV)
+ZoneType = 'CCAA'
 
 def usage():
     print('Usage: python *.py -f file.csv')
@@ -72,6 +78,8 @@ def cleanString(s):
     # Remove  dots at the end of the string
     while s[-1]=='.':
         s = s[0:-1]
+        if (len(s)<1):
+            return ''
 
     # Remove '(' and ')' sections
     while s.find('(')!=-1:
@@ -102,10 +110,18 @@ def cleanColumns(s):
 def cleanEncodingLower(s):
     s  =  cleanString(s).lower()
     s = s.replace('á', 'a')
+    s = s.replace('\xc3\xa1', 'a')
+    s = s.replace('Á', 'a')
+    s = s.replace('\xc3\x81', 'a')
     s = s.replace('é', 'e')
+    s = s.replace('\xc3\xa9', 'e')
     s = s.replace('í', 'i')
+    s = s.replace('\xc3\xad', 'i')
     s = s.replace('ó', 'o')
+    s = s.replace('\xc3\xb3', 'o')
     s = s.replace('ú', 'u')
+    s = s.replace('\xc3\xba', 'u')
+    s = s.replace('\xc3\xb1','n')
     return s
 
 
@@ -416,11 +432,11 @@ def getReportColumns(csvfile):
             print str(n_row) + str(header)
         if not isHeaderSection:
             break
-    return header
+    return header[1:-1]
 
 def getCorrectProvName(s):
 
-    s = cleanString(s).lower() 
+    s = cleanEncodingLower(s)
 
     provDict  =  createProvDictionary()
     for k in provDict.keys():
@@ -432,7 +448,7 @@ def getCorrectProvName(s):
 
 def getCorrectCCAAName(s):
 
-    s = cleanString(s).lower() 
+    s = cleanEncodingLower(s)
 
     ccaaDict  =  createCCAADictionary()
     for k in ccaaDict.keys():
@@ -442,8 +458,17 @@ def getCorrectCCAAName(s):
     return None
 
 
+def cleanRow(row):
+    for i in range(0, len(row)):
+        row[i] = cleanString(row[i]).replace('"',"");
+    if len(row[-1])<1:
+        row = row[:-1]
+    return row
+
 def getReportData(csvfile):
     """Get report data of the table."""
+
+    global ZoneType
 
     # TODO It is always starts at 9
     reader = open(csvfile, "rb")
@@ -471,11 +496,12 @@ def getReportData(csvfile):
                 break
             
             row = line.split(';')
+            
             rowName = getCorrectProvName(row[0])
             if rowName != None:
                 print "Encontre un PROV: " + rowName
                 row[0] = rowName
-                dataProv.append(row)
+                dataProv.append(cleanRow(row))
             else:
                 print "Row ["+row[0]+"] is NOT a  Province"
 
@@ -483,15 +509,21 @@ def getReportData(csvfile):
             if rowName != None:
                 print "Encontre un CCAA: " + rowName
                 row[0] = rowName
-                dataCCAA.append(row)
+                dataCCAA.append(cleanRow(row))
             else:
                 print "Row ["+row[0]+"] is NOT a  CCAA"
 
     ## Choose one of the 2 data 
+
     if (len(dataCCAA)>=len(dataProv)):
+        ZoneType = 'CCAA'
+        print 'La zona es: ' +ZoneType + '   c/p ' + str(len(dataCCAA)) + '/' + str(len(dataProv))
         data = dataCCAA
     else:
+        ZoneType = 'PROV'
+        print 'La zona es: ' +ZoneType + '   c/p ' + str(len(dataCCAA)) + '/' + str(len(dataProv))
         data = dataProv
+
 
     print data
     #### TODO Cell with '--' == None 
@@ -507,6 +539,20 @@ def getID(arg1, arg2):
 
     return h.hexdigest()
 
+def getOwner():
+    return 'mate_admin'
+
+def getDescription(csvfile):
+    return None
+
+#############################################################
+########### TODO
+########### TODO
+########### TODO
+def getZone(csvfile):
+    global ZoneType
+    print 'La zona es en getZone(): ' +ZoneType
+    return ZoneType
 
 def execute(csvfile):
 
@@ -516,18 +562,32 @@ def execute(csvfile):
    ##PARSING SECTION
     title = getTitle(csvfile)
     units = getUnits(csvfile)
-    notes = getNotes(csvfile)
     source = getDataSource(csvfile)
+    notes = getNotes(csvfile)
     copy = getCopyright(csvfile)
+    owner = getOwner()
+    description = getDescription(csvfile)
+
+    tags = getTags(csvfile)
+
     columns = getReportColumns(csvfile)
     data = getReportData(csvfile)
-    tags = getTags(csvfile)
+
+    print '\n djskffffffffffffffffffffffffffffffffffffffffsd gjksdnfgjksdfhngjksdfgjsdklfghsdjkfghjksdfhgsdlfg \n\n' + str(data[0])
+
+
+    zone = getZone(csvfile) #CCAA or PROV
+    print 'La zona entregada es : ' + zone
+
 
     ## DATA BASE
     report_id = getID(title, columns)
     print('\n ID[[' + report_id + ']]')
-
     print('\n\n')
+    dao = postgis_dao()
+    print('DONE1')
+    dao.createLayer(report_id, columns, zone, data)
+    print('DONE2')
 
 if __name__ == "__main__":
     main(sys.argv[1:])
