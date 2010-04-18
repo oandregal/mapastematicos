@@ -31,18 +31,14 @@ class QueriesDB:
 
 
     # Methods
-    def addReport(self, report_data, map_data, tags):
-        id_report = self.addReportMetaInfo(report_data)
-        id_map    = self.addMap(id_report, map_data, tags)
-        return id_report
-
-    def addReportMetaInfo(self, report_data):
+    def addReport(self, report_data):
         """Introduces the meta information associated to a new report"""
 
         tablename = "report"
         id_report = None
         try:
             id_report = self.dbcon.insert(tablename,
+                                          id_report       = report_data['id_report'],
                                           title           = report_data['title'],
                                           description     = report_data['description'],
                                           units           = report_data['units'],
@@ -57,25 +53,23 @@ class QueriesDB:
 
         return id_report
 
-    def addMap(self, idx_report, map_data, tags):
+    def addMap(self, map_data, tags):
         """Introduces a new map linked to a report"""
 
         tablename = "map"
-        id_map = None
-        img_url = str(self.last_id_map + 1) + ".png"
-        self.last_id_map += 1
         try:
-            id_map = self.dbcon.insert(tablename,
-                                       id_report   = idx_report,
-                                       image_url   = img_url,
-                                       table_csv   = map_data['table_csv'],
-                                       column_name = map_data['column_name'])
+            id = self.dbcon.insert(tablename,
+                                   id_map    = map_data['id_map'],
+                                   id_report = map_data['id_report'],
+                                   image     = map_data['id_map'] + ".png",
+                                   stats     = map_data['id_map'] + "_stats" + ".png",
+                                   map_name  = map_data['map_name'])
 
         except Exception as e:
             print e
 
-        self.addTagsToMap(id_map, tags)
-        return id_map
+        self.addTagsToMap(map_data['id_map'], tags)
+        return map_data['id_map']
 
     def addTagsToMap(self, id_map, tags):
         for i in range(len(tags)):
@@ -130,7 +124,7 @@ class QueriesDB:
         sql_where = "id_map = " + str(id_mapa)
         try:
             idtags_list = self.dbcon.select(tablename,
-                                         where = sql_where)
+                                            where = sql_where)
 
         except Exception as e:
             print e
@@ -164,18 +158,18 @@ if __name__ == "__main__":
 
     q = QueriesDB(db_config)
 
-#    #INSERT TESTS
-#    id_report = q.addReport(report_data, map_data, tags)
-#    print "Created report nro " + str(id_report)
-#
-#    id_map    = q.addMap(id_report, map_data, tags)
-#    print "Created map nro " + str(id_map)
-#
-#    id_user   = q.addUser(user['nick'],
-#                          user['email'])
-#    print "Created user nro " + str(id_user)
+    #INSERT TESTS
+    id_report = q.addReport(report_data)
+    print "Created report nro " + str(id_report)
+
+    id_map    = q.addMap(map_data, tags)
+    print "Created map nro " + str(id_map)
+
+    id_user   = q.addUser(user['nick'],
+                          user['email'])
+    print "Created user nro " + str(id_user)
 
     #SELECT TESTS
-    tag_list = q.getTags(2)
+    tag_list = q.getTags(id_map)
     print tag_list
 
