@@ -16,12 +16,12 @@ class QueriesDB:
 
     last_id_map = 0
 
-    def __init__(self, dbhost, dbname, dbuser, dbpass):
+    def __init__(self, db_config):
 
-        self.dbhost = dbhost
-        self.dbname = dbname
-        self.dbuser = dbuser
-        self.dbpass = dbpass
+        self.dbhost = db_config['dbhost']
+        self.dbname = db_config['dbname']
+        self.dbuser = db_config['dbuser']
+        self.dbpass = db_config['dbpass']
 
         self.dbcon = web.database(dbn  = 'mysql',
                                   host = self.dbhost,
@@ -149,7 +149,11 @@ class QueriesDB:
         except Exception as e:
             print e
 
-        return tagnames_list
+        aux = []
+        for i in range(len(tagnames_list)):
+            aux.append(tagnames_list[i]['tagname'])
+
+        return aux
 
 
 if __name__ == "__main__":
@@ -176,7 +180,5 @@ if __name__ == "__main__":
 
     #SELECT TESTS
     tag_list = q.getTags(2)
-    print len(tag_list)
-    for i in range(len(tag_list)):
-        print str(tag_list[i]) + "\n"
+    print tag_list
 

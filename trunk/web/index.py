@@ -3,7 +3,7 @@
 import sys
 import web
 
-import queriesdb
+from queriesdb import QueriesDB
 from tests import db_config
 from tests import report_data, map_data, tags
 from tests import user
@@ -26,8 +26,10 @@ class Index:
 
 
 class Map:
-    def GET(self, vars):
-        return render.map(format(vars))
+    def GET(self, id_map):
+        q = QueriesDB(db_config)
+        tagnames = q.getTags(id_map)
+        return render.map(tagnames)
 
 
 class Tag:

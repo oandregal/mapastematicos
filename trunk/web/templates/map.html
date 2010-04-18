@@ -1,6 +1,6 @@
-$def with (vars)
+$def with (tags)
 
-$if vars:
+$if tags:
    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
    <html>
 
@@ -24,7 +24,7 @@ $if vars:
 
    <div id="menu" class="col8 bordred">
      <!-- <h3>Mapa</h3> -->
-       <h3>$vars</h3>
+     <h3>Título del mapa</h3>
      <img src="../static/img/espanha.png" width="600" height="446" />
      <img src="../static/img/stats.png" width="600" height="281" />
    </div>
@@ -32,12 +32,8 @@ $if vars:
    <div id="menu" class="col2 bordred last">
      <h4>Tags</h4>
      <ul>
-       <li><a href="/tag/1"></a>Tag 1</li>
-       <li><a href="/tag/2"></a>Tag 2</li>
-       <li><a href="/tag/1"></a>Tag 1</li>
-       <li><a href="/tag/2"></a>Tag 2</li>
-       <li><a href="/tag/1"></a>Tag 1</li>
-       <li><a href="/tag/2"></a>Tag 2</li>
+     $for i in range(len(tags)):
+        <li>$tags[i]</li>
      </ul>
      <h4>Downloads</h4>
      <ul>
