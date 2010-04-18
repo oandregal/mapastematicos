@@ -14,7 +14,7 @@ render = web.template.render('templates/')
 urls = (
         '/', 'Index',
         '/map/(.+)', 'Map',
-        '/tag', 'Tag',
+        '/tag/(.+)', 'Tag',
         '/search', 'Search'
 )
 
@@ -34,17 +34,25 @@ class Map:
         vars = [tagnames, title]
         if title == None:
             msg = "Lo sentimos, pero parece que no tenemos el mapa que nos pide."
-            return render.search()
+            return render.notfound(msg)
         return render.map(vars)
 
 
 class Tag:
-    def GET(self):
+    def GET(self, id_tag):
+        id_tag = None
+        if id_tag == None:
+            msg = "Lo sentimos, pero parece que no tenemos la etiqueta que nos pide."
+            return render.notfound(msg)
         return render.search()
 
 
 class Search:
     def GET(self):
+        id_search = None
+        if id_search == None:
+            msg = "Lo sentimos, pero parece que no hemos encontrado nada como lo que nos pide."
+            return render.notfound(msg)
         return render.search()
 
 
