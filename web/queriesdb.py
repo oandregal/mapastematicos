@@ -147,11 +147,12 @@ class QueriesDB:
             print e
 
         if len(tagnames_list) < 1:
-            return None
+            aux = None
 
-        aux = []
-        for i in range(len(tagnames_list)):
-            aux.append(tagnames_list[i]['tagname'])
+        if aux != None:
+            aux = []
+            for i in range(len(tagnames_list)):
+                aux.append(tagnames_list[i]['tagname'])
 
         return aux
 
