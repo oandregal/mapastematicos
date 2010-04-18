@@ -39,7 +39,7 @@ body {
 
 #wrapper {
 
-	background-image:url('../img/footer2.png');
+	background-image:url('/static/img/footer2.png');
 	background-repeat: repeat-x;
 	background-position: bottom;
 	}
@@ -70,13 +70,13 @@ th {
 	}
 
 #logo {
-	background-image: url('../img/logo_mate.png');
+	background-image: url('/static/img/logo_mate.png');
 	width:  842px;
 	height: 595px;
 	}
 
 #presentacion {
-	background-image: url('../img/header_mapa.png');
+	background-image: url('/static/img/header_mapa.png');
 	height:182px;
 	}
 
