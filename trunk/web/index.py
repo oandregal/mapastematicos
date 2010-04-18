@@ -29,7 +29,9 @@ class Map:
     def GET(self, id_map):
         q = QueriesDB(db_config)
         tagnames = q.getTags(id_map)
-        return render.map(tagnames)
+        title    = q.getTitle(id_map)
+        vars = [tagnames, title]
+        return render.map(vars)
 
 
 class Tag:
