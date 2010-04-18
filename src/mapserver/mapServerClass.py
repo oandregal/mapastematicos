@@ -31,6 +31,8 @@ from mapFilesClass import MapFilesClass
 # from scpClass import SCPClass
 
 class MapServerClass:
+    mapImageSize = "750 550"
+    tbImageSize = "168 125"
 
     def __init__(self):
         # self.scp = SCPClass()
@@ -78,13 +80,36 @@ class MapServerClass:
 
 
 
+    def generateAllImages(self, mapName, table, column):
+        """
+        1.- Crea un .map para el mapa principal y luego la imagen (mapName.png)
+        2.- Crea un .map para el thumbnail y luego el thumbnail (mapName_thumb.png)
+        3.- Crea una imagen de estadísticas desde Google Chart (mapName_stats.png)
+        """
+        # Imagen principal
+        self.mfs.generateMapFile (self.mapfileDir, mapName, table, column, self.mapImageSize )
+        self.generateImage(mapName)
+
+        # Thumbnail
+        # poco optimo generar la imagen así, igual mejor con convert
+        tbName = mapName + '_thumb'
+        self.mfs.generateMapFile (self.mapfileDir,tbName, table, column, self.tbImageSize)
+        self.generateImage(tbName)
+
+
+
+
+
+
 
 msc = MapServerClass()
 
-mapName = "foo"
+mapName = "gris_oscuro"
 table = "ccaa_2"
 column = "pobl_2009"
 
-valor = msc.getImageUri(mapName, table, column)
+msc.generateAllImages(mapName, table, column)
+#valor = msc.getImageUri(mapName, table, column)
 
-print valor
+
+

@@ -31,6 +31,8 @@ from dao import DAOClass
 class MapFilesClass:
 
     NRANGES = 5
+    bgcolor = "105 105 105"
+
 
     def __init__(self):
         self.dao = DAOClass();
@@ -43,36 +45,36 @@ class MapFilesClass:
 
     def getRanges(self, table, column):
         rs = self.dao.getRS(table,column)
-        
-        
+
+
         if rs != "Error":
             values = self.dao.getValuesFromRS(rs)
             ranges = self.dao.getRangesFromValues(values, self.NRANGES, "foo")
 
-            print rs
-            print ranges
+            # print rs
+            # print ranges
 
             return ranges
         else:
             print "Error Accediendo a la bd"
 
-            
+
     def getRangeN(self, ranges, n):
         return ranges[n*2:n*2+2]
-    
-    
-    def generateMapFile(self, mapfileDir, name, table, column):
-        
+
+
+    def generateMapFile(self, mapfileDir, name, table, column, size):
+
         ranges = self.getRanges(table, column)
 
-        
+
 
         mapfilePath = os.path.abspath(mapfileDir + name + '.map')
         f = open (mapfilePath, "w")
         f.write ('MAP\n')
         f.write ('NAME "' + name + '"\n')
-        f.write ('SIZE 400 300\n') # Tamaño en pixeles
-        f.write ('IMAGECOLOR 245 245 245\n') # Color de fondo de la imagen
+        f.write ('SIZE ' + size + '\n')
+        f.write ('IMAGECOLOR ' + self.bgcolor + '\n') # Color de fondo de la imagen
         f.write ('IMAGETYPE png\n')
         f.write ('EXTENT -389564.93536510505 3826792.0671249004 1127056.8418508545 4859444.06038567\n')
 
