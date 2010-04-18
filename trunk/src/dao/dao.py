@@ -22,8 +22,9 @@
 # AUTHORS:
 # Francisco Puga Alonso <fran.puga@gmail.com> <http://conocimientoabierto.es>
 # Andres Maneiro Boga <andres.maneiro@gmail.com> <http://nosolosoftware.es>
-# Adrián Eiris
-# Nacho Varela
+# Adrián Eiris Torres <adrianet82@gmail.com> <http://jauladepalabras.netii.net/>
+# Nacho Varela  García <nachouve@gmail.com> <http://libresig.blogspot.com/>
+
 
 import psycopg2
 
@@ -42,7 +43,7 @@ class DAOClass:
     # def getPGConnection(self):
     #     self.conn = psycopg2.connect(getConnectionString())
     #     self.cur = self.conn.cursor()
-        
+
 
     def getRS(self, table, column):
         # Obtiene un RS de la bd. [(nombre1, value1), ..., (nombren, valuen)]
@@ -51,7 +52,7 @@ class DAOClass:
         cur.execute(consult)
         rs = cur.fetchall()
         return rs
-    
+
     def getValuesFromRS(self, rs):
         values = []
         for i in rs:
@@ -65,12 +66,12 @@ class DAOClass:
             names.append(i[0])
 
         return names
-            
-
-        
 
 
-            
-    
+
+
+
+
+
     def getRanges(self, table, colunm):
         # Devuelve un array de 10 valores con los rangos
