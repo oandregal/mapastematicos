@@ -191,6 +191,37 @@ class QueriesDB:
         return title
 
 
+    def getResultsByTag(self, id_tag):
+        """
+        Devuelve un diccionario {id_map1 : map_name1, ..., id_mapn : map_namen}
+        """
+        # SELECT m.id_map, m.map_name FROM map as m, tags_maps as tm WHERE tm.id_tag = 15 AND tm.id_map = m.id_map;
+        sql_what = "m.id_map, m.map_name"
+        sql_tables = "map as m, tags_maps as tm"
+        sql_where = "tm.id_tag = "+ str(id_tag) + " AND tm.id_map = m.id_map"
+
+        rs = []
+        result = {}
+        try:
+            rs = self.dbcon.select(sql_tables,
+                                   what = sql_what,
+                                   where = sql_where)
+        except Exception as e:
+            print e
+
+        if len(rs) < 1:
+            return None
+
+        for i in range(len(rs)):
+            aux = rs[i]
+            key = aux['id_map']
+            value = aux['map_name']
+            result[key] = value
+
+        return result
+
+
+
 
 
 
@@ -219,10 +250,12 @@ if __name__ == "__main__":
     # tag_dict = q.getTags(id_map)
     # print str(tag_dict)
 
-
-
-
     # getTitleTest
     # t = q.getTitle(id_map)
     # print t
+
+
+    # TEST FOR getResultsByTag
+    # resultsByTag = q.getResultsByTag(4)
+    # print str(resultsByTag)
 
