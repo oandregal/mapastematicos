@@ -20,31 +20,28 @@ $def with (vars)
 
 <div id="presentacion" class="col12 b1 bordred">
 
-  <p class="right"><a href="/about">Sobre el proyecto</a> | <a href="/thanks">Agradecimientos</a> | <a href="http://twitter.com/mapastematicos">Nuestro twitter</a> | <a href="http://www.youtube.com/user/mapastematicos">Nuestro Youtube</a></p>
-	<id="search">
+  <p class="right"><a href="http://mapastematicos.org">Home</a> | <a href="/about">Sobre el proyecto</a> | <a href="/thanks">Agradecimientos</a> | <a href="http://twitter.com/mapastematicos">Nuestro twitter</a> | <a href="http://www.youtube.com/user/mapastematicos">Nuestro Youtube</a></p>
+<!--	<id="search">
 	  <form>
 		<div class="buscar">
 			<input type="text" size="20" />
 			<input type="submit" value="Buscar" />
 		</div>
 	  </form>
+	  -->
 </div>
 
-    <h3>Texto intro</h3>
+    <!-- <h3>Visualizamos la información en mapas.</h3> -->
 
 <div id="menu" class="col8 bordred content">
-	<img src="/static/img/espanha.png" alt="" width="500px"/>
+	<img src="/static/img/img_portada.png" alt="" width="500px"/>
 </div>
 
 <div id="menu" class="col2 bordred last sidebar">
-  <h4>Tags</h4>
+  <h4>Tags populares</h4>
   <ul>
-    <li><a href="/tag/1"></a>Tag 1</li>
-    <li><a href="/tag/2"></a>Tag 2</li>
-    <li><a href="/tag/1"></a>Tag 1</li>
-    <li><a href="/tag/2"></a>Tag 2</li>
-    <li><a href="/tag/1"></a>Tag 1</li>
-    <li><a href="/tag/2"></a>Tag 2</li>            
+  $for i in range(len(vars[0])):
+     <li><a href="/tag/$vars[i][0]">$vars[i][1]</a></li>            
   </ul>
 </div>
 
