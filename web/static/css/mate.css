@@ -20,14 +20,13 @@
 /* Typography   -------------------------------------------- */
 
 a:link {
-	color: #90ee90;
+	color: #65aa65;
 	text-decoration: none;
 	}
 a:visited {
-	color: #999999;
+	color: #65aa65;
 	text-decoration: none;
-	}
-a:hover {
+	}a:hover {
 	color: #808080;
 	text-decoration: none;
 	}
@@ -150,13 +149,13 @@ th {
 	}
 
 li > a:link {
-    color: #000;
-    text-decoration: none;
-    }
-li> a:visited {
-    color: #000;
-    text-decoration: none;
-    }
+	color: #65aa65;
+	text-decoration: none;
+	}
+li >a:visited {
+	color: #65aa65;
+	text-decoration: none;
+	}
 li> a:hover {
     color: #FFF;
     }
@@ -164,3 +163,9 @@ li> a:active {
     color: #FFF;
     text-decoration: none;
     }
+.sidebar li {
+	border-bottom-style: dotted;
+	border-width: 1px;
+	border-color: #808080;
+	list-style: none;
+}
