@@ -1,0 +1,154 @@
+/* Table of contents ---------------------------------------
+
+	Typography
+	Body
+	-ul
+	-table
+	-th
+	logo
+	---------------
+
+*/
+
+/* Typography   -------------------------------------------- */
+
+a:link {
+	color: #90ee90;
+	text-decoration: none;
+	}
+a:visited {
+	color: #999999;
+	text-decoration: none;
+	}
+a:hover {
+	color: #808080;
+	text-decoration: none;
+	}
+a:active {
+	color: #999999;
+	text-decoration: none;
+	}
+
+body { 
+	font-family: Georgia,serif,Arial,sans-serif;
+	color: #000000;
+	font-size: 16px;
+	}
+
+/* Wrapper   -------------------------------------------- */
+
+#wrapper {
+
+	background-image:url('../img/footer2.png');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	}
+
+/* Body   -------------------------------------------- */
+
+body { 
+	margin:0 0 0 0; /* top right bottom left */
+	background-repeat: repeat-x;
+	background-position: bottom;
+
+	clear: both;
+
+	}
+
+ul { 
+	list-style-type: square;
+	}
+
+table, th, td { 
+	border: 0px;
+	}
+
+th { 
+	padding: 5px;
+	text-align: center;
+	text-font: bold;
+	}
+
+#logo {
+	background-image: url('../img/logo_mate.png');
+	width:  842px;
+	height: 595px;
+	}
+
+#presentacion {
+	background-image: url('../img/header_mapa.png');
+	height:182px;
+	}
+
+#presentacion h1 { 
+	text-align: center;
+	}
+
+#presentacion p{ 
+	padding-left: 2em;
+	padding-right: 2em;
+	}
+
+#buscar {
+		
+	}
+
+#aviso {
+	margin-top: 1em;
+	background-color: red;
+	}
+
+#aviso p{
+	padding-left: 2em;
+	padding-right: 2em;
+	padding-top: 1em;
+	text-align: center;
+	}
+
+#menu { 
+
+	padding-left: 3em;
+	padding-right: 2em;
+	padding-bottom: 2em;
+	margin-top: 1em;
+        }
+
+#menu img{
+	/*padding-top: 1em;*/
+}
+
+#pedepaxina { 
+	margin-top:1em;
+	margin-bottom:1em;
+	}
+
+#seccion-sidebar { 
+	background-color: #e3d185;
+	padding-left: 2em;
+	padding-right: 0em;
+	padding-bottom: 2em;
+	margin-top: 1em;
+	}
+	
+#seccion-contido { 
+	background-color: #e3d185;
+	padding-left: 2em;
+	padding-right: 0em;
+	padding-left: 3em;
+	padding-bottom: 2em;
+	margin-top: 1em;
+	}
+	
+.bordred {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	}
+
+.sidebar {
+	background-color: #90ee90;
+}
+
+.content {
+	/*background-color: #00bfe2;*/	
+	}
+
