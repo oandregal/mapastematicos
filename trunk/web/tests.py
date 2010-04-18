@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-db_config = {'db_host': "yourhost",
-             'db_name': "yourname",
-             'db_user': "youruser",
-             'db_pass': "yourpass"}
+db_config = {'dbhost': "yourhost",
+             'dbname': "yourdbname",
+             'dbuser': "youruser",
+             'dbpass': "yourpass"}
 
 user = {'nick' : "your_nick",
         'email': "your_email"}
@@ -19,6 +19,5 @@ report_data = {'title'          : "Title",
                'region_analysis': "CCAA",
                'id_user'        : 0,
                'data_source'    : "INE",
-               'footnote'       : "footnotes",
+               'footnotes'       : "footnotes",
                'data_copyright' : "copyright"}
-
