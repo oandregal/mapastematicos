@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 db_config = {'dbhost': "yourhost",
-             'dbname': "yourdbname",
+             'dbname': "yourdb",
              'dbuser': "youruser",
              'dbpass': "yourpass"}
 
@@ -10,14 +10,16 @@ user = {'nick' : "your_nick",
 
 tags = ["tag1", "tag2", "tag3"]
 
-map_data = {'table_csv'  : "table",
-            'column_name': "column"}
+map_data = {'id_report': "12345678901234567890123456789012",
+            'id_map'   : "12345678901234567890123456789012",
+            'map_name' : "name of the map"}
 
-report_data = {'title'          : "Title",
-               'description'    : "una descripcion",
+report_data = {'id_report'      : "12345678901234567890123456789012",
+               'title'          : "Title",
+               'description'    : "",
                'units'          : "unidades",
                'region_analysis': "CCAA",
-               'id_user'        : 0,
+               'id_user'        : 'mate',
                'data_source'    : "INE",
-               'footnotes'       : "footnotes",
+               'footnotes'      : "footnotes",
                'data_copyright' : "copyright"}
