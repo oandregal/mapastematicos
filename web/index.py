@@ -22,33 +22,33 @@ app = web.application(urls, globals())
 
 class Index:
     def GET(self):
-        name = ""
-        return render.index(name)
+        q = QueriesDB(db_config)
+        resultset = q.getMoreViewedTags()
+        return render.index(resultset)
 
 
 class Map:
     def GET(self, id_map):
         q = QueriesDB(db_config)
-        #tagnames = q.getTags(id_map)
-        tagnames = {'1': 't1', '2': 't2', '3': 't3'}
+        tagnames = q.getTags(id_map)
         title    = q.getTitle(id_map)
-        vars = [tagnames, title]
-        if title == None:
+        vars     = [tagnames, title]
+
+        if (title == None) and (tagnames == None):
             msg = "Lo sentimos, pero parece que no tenemos el mapa que nos pide."
             return render.notfound(msg)
-        return render.map(vars)
+        else:
+            title = ""
+            tagnames = {"None":"None"}
+            return render.map(vars, id_map + ".png", id_map + "_thum.png")
 
 
 class Tag:
     def GET(self, id_tag):
-        #q = QueriesDB(db_config)
-        #resultset = q.getResultsByTag(id_tag)
-        resultset = {'12345678901234567890123456789012': 'titulo 1 del mapa',
-                     '12345678901234567890123456789012': 'titulo 2 del mapa',
-                     '12345678901234567890123456789012': 'titulo 3 del mapa'
-                     }
+        q = QueriesDB(db_config)
+        resultset = q.getResultsByTag(id_tag)
         if resultset == None:
-            msg = "Lo sentimos, pero parece que no tenemos la etiqueta que nos pide."
+            msg = "Lo sentimos, pero parece que no tenemos mapas con la etiqueta que nos pide."
             return render.notfound(msg)
         return render.search(resultset)
 

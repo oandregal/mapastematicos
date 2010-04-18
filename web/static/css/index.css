@@ -7,3 +7,19 @@ body {
 .txt {
        color: #FFF;
  }
+
+li > a:link {
+    color: #000;
+    text-decoration: none;
+    }
+li> a:visited {
+    color: #000;
+    text-decoration: none;
+    }
+li> a:hover {
+    color: #FFF;
+    }
+li> a:active {
+    color: #FFF;
+    text-decoration: none;
+    }

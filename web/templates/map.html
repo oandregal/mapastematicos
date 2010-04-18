@@ -1,4 +1,4 @@
-$def with (vars)
+$def with (vars, id_map, id_thumb)
 
 $if vars:
    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -17,7 +17,7 @@ $if vars:
    <div class="page t5">
    
    <div id="presentacion" class="col12 b1 bordred">
-     <p class="right"><a href="/about">Sobre el proyecto</a> | <a href="/thanks">Agradecimientos</a> | <a href="http://twitter.com/mapastematicos">Nuestro twitter</a> | <a href="http://www.youtube.com/user/mapastematicos">Nuestro Youtube</a></p>
+     <p class="right"><a href="http://mapastematicos.org">Home</a> | <a href="/about">Sobre el proyecto</a> | <a href="/thanks">Agradecimientos</a> | <a href="http://twitter.com/mapastematicos">Nuestro twitter</a> | <a href="http://www.youtube.com/user/mapastematicos">Nuestro Youtube</a></p>
    </div>
    
        <h3>
@@ -25,8 +25,8 @@ $if vars:
        </h3>
    
    <div id="menu" class="col8 bordred content">
-     <img src="/static/img/espanha.png" width="600" height="446" />
-     <img src="/static/img/stats.png" width="600" height="281" />
+     <img src="/static/img/$id_map" width="600" height="446" />
+     <img src="/static/img/$id_thumb" width="600" height="281" />
    </div>
    
    <div id="menu" class="col2 bordred last sidebar">
@@ -35,12 +35,14 @@ $if vars:
      $for i in range(len(vars[0])):
         <li><a href="/tag/$vars[0].keys()[i]">$vars[0].values()[i]</a></li>
      </ul>
+     <!--
      <h4>Downloads</h4>
      <ul>
        <li><a href="/tag/1"></a>csv</li>
        <li><a href="/tag/2"></a>shp</li>
        <li><a href="/tag/2"></a>kml</li>
      </ul>
+     -->
    </div>
    
    <div class="footer"><p></p></div>
