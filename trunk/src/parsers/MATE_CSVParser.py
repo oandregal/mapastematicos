@@ -556,6 +556,11 @@ def getZone(csvfile):
 
 def execute(csvfile):
 
+    sys.path.append('../../web')
+    from queriesdb import QueriesDB
+    from tests import dbconfig
+    q = QueriesDB(dbconfig)
+
     ## 
     checkIfINE(csvfile)
 
@@ -573,14 +578,10 @@ def execute(csvfile):
     columns = getReportColumns(csvfile)
     data = getReportData(csvfile)
 
-    print '\n djskffffffffffffffffffffffffffffffffffffffffsd gjksdnfgjksdfhngjksdfgjsdklfghsdjkfghjksdfhgsdlfg \n\n' + str(data[0])
-
-
     zone = getZone(csvfile) #CCAA or PROV
-    print 'La zona entregada es : ' + zone
 
 
-    ## DATA BASE
+    ## ADD  POSTGIS
     report_id = getID(title, columns)
     print('\n ID[[' + report_id + ']]')
     print('\n\n')
@@ -589,5 +590,40 @@ def execute(csvfile):
     dao.createLayer(report_id, columns, zone, data)
     print('DONE2')
 
+
+    ## ADD REPORTS to the WEB DB
+    r_params = dict()
+    r_params['id_report'] = report_id
+    r_params['title'] = title
+    r_params['description'] =  ''
+    r_params['units'] = units
+    r_params['report_id'] = zone
+    r_params['data_source'] = source
+    r_params['footnotes'] = notes
+    r_params['id_user'] = 'admin_mate'
+    r_params['data_copyright'] = copy
+    print str(r_params)
+    q.addReport(r_params)
+
+    ## GENERATE IMAGES
+    for col in columns:
+        map_id = getID(report_id, col)
+        
+        m_params = dict()
+        m_params['id_map'] = map_id
+        m_params['id_report'] =  report_id
+        ## CLEAN TITLE
+        short_title = title[:title.find(',')]
+        m_params['map_name'] = short_title + ' ['+col+']'
+
+        print '\n\n'
+        print 'TITLE: ' + m_params['map_name']
+        print 'map_id: ' + map_id
+        print 'report_id: ' + report_id
+        print 'col: ' + col
+        #generateAllImages(map_id, 'table_'+report_id, col)
+        q.addMap(m_params, tags)
+
 if __name__ == "__main__":
     main(sys.argv[1:])
+
