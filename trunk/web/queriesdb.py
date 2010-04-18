@@ -149,6 +149,29 @@ class QueriesDB:
 
         return aux
 
+    def getTitle(self, id_mapa):
+        # select t2.title from map as t1, report as t2 where t1.id_map = '2' AND t1.id_report = t2.id_report;
+        # devuelve un diccionario columna = resultado
+        sql_what = "t2.title"
+        sql_table = "map as t1, report as t2"
+        sql_where = "t1.id_map = " + str(id_mapa) + " AND t1.id_report = t2.id_report;"
+        title = ""
+        try:
+            rs = self.dbcon.select(sql_table,
+                                   what = sql_what,
+                                   where = sql_where)
+            title = rs[0]
+        except Exception as e:
+            title = "Some error happens"
+            print e
+
+        # return rs[0]['title'] # para devolver unicamente el script
+        return title
+
+
+
+
+
 
 if __name__ == "__main__":
 
@@ -159,17 +182,20 @@ if __name__ == "__main__":
     q = QueriesDB(db_config)
 
     #INSERT TESTS
-    id_report = q.addReport(report_data)
-    print "Created report nro " + str(id_report)
+    # id_report = q.addReport(report_data)
+    # print "Created report nro " + str(id_report)
 
-    id_map    = q.addMap(map_data, tags)
-    print "Created map nro " + str(id_map)
+    # id_map    = q.addMap(map_data, tags)
+    # print "Created map nro " + str(id_map)
 
-    id_user   = q.addUser(user['nick'],
-                          user['email'])
-    print "Created user nro " + str(id_user)
+    # id_user   = q.addUser(user['nick'],
+    #                       user['email'])
+    # print "Created user nro " + str(id_user)
 
     #SELECT TESTS
-    tag_list = q.getTags(id_map)
-    print tag_list
+    # tag_list = q.getTags(id_map)
+    # print tag_list
 
+    # getTitleTest
+    # t = q.getTitle(id_map)
+    # print t['title']
