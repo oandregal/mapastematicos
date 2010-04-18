@@ -28,12 +28,12 @@
 import mapscript
 import os
 from mapFilesClass import MapFilesClass
-from scpClass import SCPClass
+# from scpClass import SCPClass
 
 class MapServerClass:
 
     def __init__(self):
-        self.scp = SCPClass()
+        # self.scp = SCPClass()
         self.mapfileDir = 'mapDir/' # privado
         self.imageDir = 'imageDir/' # Respecto a la parte publica del apache de abredatos
         self.mfs = MapFilesClass()
@@ -53,13 +53,13 @@ class MapServerClass:
 
     def getImageUri(self,mapName, table, column):
 
-        try:
-            self.mfs.generateMapFile (self.mapfileDir, mapName, table, column)
-            imagePath = self.generateImage(mapName)
-            uri = self.host + '/srv/www/' + imagePath
-            return uri
-        except:
-            return "Error"
+#        try:
+        self.mfs.generateMapFile (self.mapfileDir, mapName, table, column)
+        imagePath = self.generateImage(mapName)
+        uri = self.host + '/srv/www/' + imagePath
+        return uri
+ #       except:
+ # return "Error"
 
 
 

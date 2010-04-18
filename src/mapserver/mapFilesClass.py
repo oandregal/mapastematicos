@@ -26,8 +26,14 @@
 # Nacho Varela  García <nachouve@gmail.com> <http://libresig.blogspot.com/>
 
 import os
+from dao import DAOClass
 
 class MapFilesClass:
+
+    NRANGES = 5
+
+    def __init__(self):
+        self.dao = DAOClass();
 
     def getConnectionString(self):
         f = open ("secret.txt", "r")
@@ -35,8 +41,31 @@ class MapFilesClass:
         f.close()
         return s
 
+    def getRanges(self, table, column):
+        rs = self.dao.getRS(table,column)
+        
+        
+        if rs != "Error":
+            values = self.dao.getValuesFromRS(rs)
+            ranges = self.dao.getRangesFromValues(values, self.NRANGES, "foo")
 
+            print rs
+            print ranges
+
+            return ranges
+        else:
+            print "Error Accediendo a la bd"
+
+            
+    def getRangeN(self, ranges, n):
+        return ranges[n*2:n*2+2]
+    
+    
     def generateMapFile(self, mapfileDir, name, table, column):
+        
+        ranges = self.getRanges(table, column)
+
+        
 
         mapfilePath = os.path.abspath(mapfileDir + name + '.map')
         f = open (mapfilePath, "w")
@@ -46,15 +75,6 @@ class MapFilesClass:
         f.write ('IMAGECOLOR 245 245 245\n') # Color de fondo de la imagen
         f.write ('IMAGETYPE png\n')
         f.write ('EXTENT -389564.93536510505 3826792.0671249004 1127056.8418508545 4859444.06038567\n')
-
-        f.write ('# WEB\n')
-        f.write ('# TEMPLATE "/srv/www/template.html"\n') # envio la image a esta plantilla
-        f.write ('# IMAGEPATH "/srv/www/images/"\n') # donde debe poner mapserver las imagenes
-        f.write ('# IMAGEURL "/images/"\n') # dirige al navegador a la carpeta donde están estas imágenes.
-                                          # + IMAGEPATH y IMAGEURL se refieren a la misma carpeta
-                                          # + el IMAGEPATH lo procesa el CGI
-                                          # + IMAGEURL lo hace el navegador.
-        f.write ('# END\n') # WEB
 
          # Definir el shape
         f.write ('LAYER\n')
@@ -67,30 +87,29 @@ class MapFilesClass:
         f.write ('DATA "the_geom from gis_schema.' + table +'"\n')
 
       # para cada rango que quiera hacer
+        for i in range(self.NRANGES):
+            f.write('CLASS\n')
+            f.write('STYLE \n')
+            f.write('COLOR ' + self.dao.color[i] + '\n')
+            f.write('OUTLINECOLOR 105 105 105\n')
+            f.write('END\n')
+            limits = self.getRangeN(ranges, i)
+            f.write('EXPRESSION ([' + column + '] >= ' + str(limits[0]) + ' AND [' + column + '] <= ' + str(limits[1]) + ')\n')
+            f.write('END\n') # CLASS
 
-        f.write('CLASS\n')
-        f.write('STYLE \n')
-        f.write('COLOR 204 255 204\n')
-        f.write('OUTLINECOLOR 102 102 102\n')
-        # f.write('WIDTH 1\n')
-        f.write('END\n')
-        f.write('EXPRESSION ([' + column + '] >= 73460 AND [' + column + '] <= 436402)\n')
-        # f.write('NAME "73.460 - 436.402"\n')
-        f.write('END\n')
 
+        # un class al final de todo por si alguno se queda fuera.
+        # + con este definimos además el color del borde de los polígonos
         f.write ('CLASS\n')
         f.write ('STYLE\n')
-        f.write ('COLOR 254 226 197\n') # relleno del polígono
-        f.write ('OUTLINECOLOR 255 0 0\n') # color del borde
+        f.write ('COLOR 255 255 255\n')
+        f.write ('OUTLINECOLOR 105 105 105\n')
         f.write ('END\n') # STYLE
-        # fin del for
         f.write ('END\n') # CLASS
 
-        # HAY QUE PONER UN CLASS AL FINAL DEL BUCLE POR SI SE QUEDA ALGUNO FUERA
 
         f.write ('END\n') # LAYER
 
-
-        f.write ('END\n') # NAME
+        f.write ('END\n') # MAP
 
         f.close()
