@@ -220,6 +220,43 @@ class QueriesDB:
 
         return result
 
+    def getMoreViewedTags(self):
+        """
+        Devuelve una lista de tuplas [ (id_tag1, tagname1) , ... , id_tag, tagnamen)]
+        La primera tupla de la lista se corresponde al tag mas visto, y el ultimo al menos visto
+        Los resultados estan limitados a 10 tags
+        """
+        # select id_tag, tagname, n_views from tags ORDER BY n_views DESC LIMIT 10;
+
+        sql_what = "id_tag, tagname"
+        sql_tables = "tags"
+        sql_order = "n_views DESC"
+        sql_limit = "10"
+
+        rs = []
+        result = []
+
+        try:
+            rs = self.dbcon.select(sql_tables,
+                                   what = sql_what,
+                                   order = sql_order,
+                                   limit = sql_limit)
+
+        except Exception as e:
+            print e
+
+
+        if len(rs) < 1:
+            return None
+
+        for i in range(len(rs)):
+            aux = rs[i]
+            tupla = (aux['id_tag'], aux['tagname'])
+            # t1 = aux['id_tag']
+            # t2 = aux['tagname']
+            result.append(tupla)
+
+        return result
 
 
 
@@ -259,3 +296,8 @@ if __name__ == "__main__":
     # resultsByTag = q.getResultsByTag(4)
     # print str(resultsByTag)
 
+
+    # TEST FOR getMoreViewedTags
+    # moreViewedTags = q.getMoreViewedTags()
+    # for i in moreViewedTags:
+    #   print str(i)
