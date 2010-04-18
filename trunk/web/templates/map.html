@@ -33,7 +33,7 @@ $if vars:
      <h4>Tags</h4>
      <ul>
      $for i in range(len(vars[0])):
-        <li>$vars[0][i]</li>
+        <li><a href="/tag/$vars[0].keys()[i]">$vars[0].values()[i]</a></li>
      </ul>
      <h4>Downloads</h4>
      <ul>

@@ -28,9 +28,13 @@ class Index:
 class Map:
     def GET(self, id_map):
         q = QueriesDB(db_config)
-        tagnames = q.getTags(id_map)
+        #tagnames = q.getTags(id_map)
+        tagnames = {'1': 't1', '2': 't2', '3': 't3'}
         title    = q.getTitle(id_map)
         vars = [tagnames, title]
+        if title == None:
+            msg = "Lo sentimos, pero parece que no tenemos el mapa que nos pide."
+            return render.search()
         return render.map(vars)
 
 
