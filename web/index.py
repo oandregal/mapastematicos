@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+sys.path.append('/home/mapastematicos/pylibs/')
 import web
 
 from queriesdb import QueriesDB
@@ -8,11 +9,10 @@ from tests import db_config
 from tests import report_data, map_data, tags
 from tests import user
 
-sys.path.append('/home/mapastematicos/pylibs/')
 render = web.template.render('templates/')
 
-urls = (
-        '/', 'Index',
+urls = ('/', "Beta",
+        '/index', 'Index',
         '/map/(.+)', 'Map',
         '/tag/(.+)', 'Tag',
         '/search', 'Search',
@@ -22,6 +22,10 @@ urls = (
 
 app = web.application(urls, globals())
 
+class Beta:
+    def GET(self):
+        return render.beta()
+    
 class Index:
     def GET(self):
         q = QueriesDB(db_config)

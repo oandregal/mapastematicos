@@ -1,4 +1,4 @@
-USE `mapastematicosweb`;
+USE `mapastematicosdb`;
 
 DROP TABLE IF EXISTS map;
 CREATE TABLE map(
