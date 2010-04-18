@@ -555,11 +555,13 @@ def getZone(csvfile):
     return ZoneType
 
 def execute(csvfile):
-
+    from tests import db_config
     sys.path.append('../../web')
     from queriesdb import QueriesDB
-    from tests import dbconfig
-    q = QueriesDB(dbconfig)
+    q = QueriesDB(db_config)
+
+    from mapServerClass import MapServerClass
+    mapserver = MapServerClass()
 
     ## 
     checkIfINE(csvfile)
@@ -621,7 +623,7 @@ def execute(csvfile):
         print 'map_id: ' + map_id
         print 'report_id: ' + report_id
         print 'col: ' + col
-        #generateAllImages(map_id, 'table_'+report_id, col)
+        mapserver.generateAllImages(map_id, 'table_'+report_id, col)
         q.addMap(m_params, tags)
 
 if __name__ == "__main__":
