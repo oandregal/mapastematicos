@@ -88,12 +88,14 @@ class MapFilesClass:
 
       # para cada rango que quiera hacer
         for i in range(self.NRANGES):
+            limits = self.getRangeN(ranges, i)
             f.write('CLASS\n')
+            f.write('NAME "' + str(limits[0]) + ' - ' + str(limits[1]) + '"\n')
             f.write('STYLE \n')
             f.write('COLOR ' + self.dao.color[i] + '\n')
             f.write('OUTLINECOLOR 105 105 105\n')
             f.write('END\n')
-            limits = self.getRangeN(ranges, i)
+
             f.write('EXPRESSION ([' + column + '] >= ' + str(limits[0]) + ' AND [' + column + '] <= ' + str(limits[1]) + ')\n')
             f.write('END\n') # CLASS
 
@@ -106,9 +108,19 @@ class MapFilesClass:
         f.write ('OUTLINECOLOR 105 105 105\n')
         f.write ('END\n') # STYLE
         f.write ('END\n') # CLASS
-
-
         f.write ('END\n') # LAYER
+
+        f.write ('LEGEND\n')
+        f.write ('STATUS embed\n')
+        f.write ('IMAGECOLOR 223 223 223\n') # color de fondo
+        f.write ('POSITION lr\n') #ul
+        f.write ('LABEL\n')
+        # f.write ('TYPE TRUETYPE\n')
+        # f.write ('FONT "arial"\n') # arial
+        f.write ('SIZE SMALL\n')
+        f.write ('COLOR 0 0 0\n')
+        f.write ('END\n')
+        f.write ('END\n')
 
         f.write ('END\n') # MAP
 
