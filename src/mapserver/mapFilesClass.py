@@ -84,7 +84,8 @@ class MapFilesClass:
 
         f.write ('CONNECTIONTYPE POSTGIS\n')
         f.write ('CONNECTION ' + self.getConnectionString() + '\n')
-        f.write ('DATA "the_geom from gis_schema.' + table +'"\n')
+        # f.write ('DATA "the_geom from gis_schema.' + table +'"\n')
+        f.write ('DATA "the_geom from gis_schema.' + table +' USING UNIQUE gid"\n')
 
       # para cada rango que quiera hacer
         for i in range(self.NRANGES):
@@ -110,18 +111,19 @@ class MapFilesClass:
         f.write ('END\n') # CLASS
         f.write ('END\n') # LAYER
 
-        f.write ('LEGEND\n')
-        f.write ('STATUS embed\n')
-        f.write ('IMAGECOLOR 223 223 223\n') # color de fondo
-        f.write ('POSITION lr\n') #ul
-        f.write ('LABEL\n')
-        # f.write ('TYPE TRUETYPE\n')
-        # f.write ('FONT "arial"\n') # arial
-        f.write ('SIZE SMALL\n')
-        f.write ('COLOR 0 0 0\n')
-        f.write ('END\n')
-        f.write ('END\n')
-
+        if size != "168 125":
+            f.write ('LEGEND\n')
+            f.write ('STATUS embed\n')
+            f.write ('IMAGECOLOR 223 223 223\n') # color de fondo
+            f.write ('POSITION lr\n') #ul
+            f.write ('LABEL\n')
+            # f.write ('TYPE TRUETYPE\n')
+            # f.write ('FONT "arial"\n') # arial
+            f.write ('SIZE SMALL\n')
+            f.write ('COLOR 0 0 0\n')
+            f.write ('END\n')
+            f.write ('END\n')
+            
         f.write ('END\n') # MAP
 
         f.close()

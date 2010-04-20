@@ -59,13 +59,13 @@ class MapServerClass:
 
     def getImageUri(self,mapName, table, column):
 
-#        try:
-        self.mfs.generateMapFile (self.mapfileDir, mapName, table, column)
-        imagePath = self.generateImage(mapName)
-        uri = self.host + '/srv/www/' + imagePath
-        return uri
- #       except:
- # return "Error"
+        try:
+            self.mfs.generateMapFile (self.mapfileDir, mapName, table, column)
+            imagePath = self.generateImage(mapName)
+            uri = self.host + '/srv/www/' + imagePath
+            return uri
+        except Exception as e:
+            print e
 
 
 

@@ -75,7 +75,7 @@ class DAOClass:
             conn = psycopg2.connect(self.getConnectionString())
             cur = conn.cursor()
 
-            consult = 'SELECT nombre,' + column + ' from gis_schema.' + table + ';'
+            consult = 'SELECT "zone_name", "'+ column + '" from gis_schema."' + table +'";'
             cur.execute(consult)
             rs = cur.fetchall()
         except:
@@ -100,17 +100,17 @@ class DAOClass:
         try:
             return float(s)
         except ValueError:
-            return "Error"
+            return None
             
         
 
     def getValuesFromRS(self, rs):
         values = []
         for i in rs:
-            values.append(self.string2Number(i[1]))
-
+            values.append(i[1])
 
         return values
+
 
     def getNamesFromRS(self, rs):
         # los devuelve en iso8859-1
@@ -124,6 +124,15 @@ class DAOClass:
         # nranges : numero de rangos
         # method : por si queremos implementar cuantiles, naturales, ..
         # tratar la lista ranges como range[0] <= values < range[1] ; range[n-1]<= values < range[n]
+
+        
+        aux = list()
+        for v in values:
+            n = self.string2Number(v)
+            if (n != None):
+                aux.append(n)
+        values = aux
+
         maximum = max(values)
         minimum = min(values)
         step = int((maximum - minimum) / nranges)
