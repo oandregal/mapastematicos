@@ -246,7 +246,7 @@ def getTags(csvfile):
                 print '--> TAG: ' + str(tags)
         else: 
             break
-    return aux
+    return tags
 
 
 def createTagDictionary():
@@ -429,7 +429,7 @@ def getReportColumns(csvfile):
                     #print "h: " + header[i] + " aux: " + cleanColumns(getPreviousNotNullString(aux, i))
                     header[i] = h
             #### TODO If there is a year on the Column put as first String?????
-            print str(n_row) + str(header)
+            #print str(n_row) + str(header)
         if not isHeaderSection:
             break
     return header[1:-1]
@@ -525,7 +525,7 @@ def getReportData(csvfile):
         data = dataProv
 
 
-    print data
+#    print data
     #### TODO Cell with '--' == None 
     return data
 
@@ -604,7 +604,9 @@ def execute(csvfile):
     r_params['footnotes'] = notes
     r_params['id_user'] = 'admin_mate'
     r_params['data_copyright'] = copy
-    print str(r_params)
+
+    print "\n\nREPORTS: " + str(r_params)
+
     q.addReport(r_params)
 
     ## GENERATE IMAGES
@@ -623,9 +625,13 @@ def execute(csvfile):
         print 'map_id: ' + map_id
         print 'report_id: ' + report_id
         print 'col: ' + col
-        mapserver.generateAllImages(map_id, 'table_'+report_id, col)
-        q.addMap(m_params, tags)
+        mapserver.generateAllImages(map_id, 'map_'+report_id, col)
+        print "PARAMS_MAP: " + str(m_params)
+        print "TAGS: " + str(list(tags))
+        q.addMap(m_params, list(tags))
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
 
+###for i in /home/uve/Desktop/CSV_INE/*; do echo $i; python /home/uve/ABREDATOS/svn/trunk/src/parsers/MATE_CSVParser.py -f $i; done  > /tmp/mate_log 2> /tmp/mate_log2 
